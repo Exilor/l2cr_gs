@@ -80,13 +80,13 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
         end
       when "LEMATAN_TELEPORT"
         npc.as(L2Attackable).clear_aggro_list
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
         npc.tele_to_location(LEMATAN_PORT)
         npc.variables["ON_SHIP"] = 1
         npc.spawn.location = LEMATAN_PORT
         FOLLOWERS_LOC.each do |loc|
           follower = add_spawn(FOLLOWERS, loc, false, 0, false, world.instance_id).as(L2Attackable)
-          follower.disable_core_ai(true)
+          follower.core_ai_disabled = true
           follower.immobilized = true
           world.followers_list << follower
         end
@@ -122,7 +122,7 @@ class Scripts::PailakaDevilsLegacy < AbstractInstance
         end
       when LEMATAN
         if npc.script_value?(0) && npc.hp_percent < 50
-          npc.disable_core_ai(true)
+          npc.core_ai_disabled = true
           npc.script_value = 1
           npc.running = true
           npc.set_intention(AI::MOVE_TO, LEMATAN_PORT_POINT)

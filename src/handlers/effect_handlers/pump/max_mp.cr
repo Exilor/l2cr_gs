@@ -5,7 +5,7 @@ class EffectHandler::MaxMp < AbstractEffect
   @power : Float64
   @heal : Bool
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @type = params.get_enum("type", EffectCalculationType, EffectCalculationType::DIFF)

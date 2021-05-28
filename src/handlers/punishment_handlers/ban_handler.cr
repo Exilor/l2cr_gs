@@ -2,7 +2,7 @@ module PunishmentHandler::BanHandler
   extend self
   extend PunishmentHandler
 
-  def on_start(task)
+  def on_start(task : PunishmentTask)
     case task.affect
     when PunishmentAffect::CHARACTER
       l2id = task.key.to_s.to_i
@@ -28,7 +28,7 @@ module PunishmentHandler::BanHandler
     end
   end
 
-  def on_end(task)
+  def on_end(task : PunishmentTask)
     # no-op
   end
 

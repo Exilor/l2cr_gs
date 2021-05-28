@@ -18,7 +18,7 @@ module FishingRodsData
     end
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "fishingRod") do |d|
         set = get_attributes(d)

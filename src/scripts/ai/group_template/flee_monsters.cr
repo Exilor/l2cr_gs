@@ -22,7 +22,7 @@ class Scripts::FleeMonsters < AbstractNpcAI
   end
 
   def on_attack(npc, attacker, damage, is_summon, skill)
-    npc.disable_core_ai(true)
+    npc.core_ai_disabled = true
     npc.set_running
 
     summon = attacker.summon if is_summon

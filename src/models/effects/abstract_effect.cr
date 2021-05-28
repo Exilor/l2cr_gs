@@ -5,7 +5,7 @@ abstract class AbstractEffect
   include Packets::Outgoing
 
   getter func_templates : Array(FuncTemplate)?
-  property ticks : Int32 = 0
+  getter ticks : Int32 = 0
 
   def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
   end
@@ -52,7 +52,7 @@ abstract class AbstractEffect
     # no-op
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::NONE.mask
   end
 

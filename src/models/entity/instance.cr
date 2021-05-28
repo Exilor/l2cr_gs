@@ -14,6 +14,7 @@ class Instance
   @eject_dead_tasks = Concurrent::Map(Int32, TaskScheduler::DelayedTask?).new
   @allow_random_walk = true
   @doors = Concurrent::Map(Int32, L2DoorInstance).new
+  @fences = Concurrent::Map(Int32, L2ColosseumFence).new
   @manual_spawn = {} of String => Array(L2Spawn)
   @last_left = -1i64
 
@@ -84,7 +85,7 @@ class Instance
     @npcs.delete_first(npc)
   end
 
-  def add_door(door_id : Int32, set : StatsSet)
+  def add_door(door_id : Int32, set : StatsSet) : L2DoorInstance?
     if @doors.has_key?(door_id)
       warn { "Door with id #{door_id} already exists." }
       return
@@ -104,6 +105,25 @@ class Instance
 
   def get_door(id : Int32) : L2DoorInstance?
     @doors[id]?
+  end
+
+  def add_fence(x : Int32, y : Int32, z : Int32, min_z : Int32, max_z : Int32, width : Int32, height : Int32, state : L2ColosseumFence::FenceState) : L2ColosseumFence
+    fence = L2ColosseumFence.new(id, x, y, z, min_z, max_z, width, height, state)
+    fence.spawn_me
+    @fences[fence.l2id] = fence
+  end
+
+  def fences : Enumerable(L2ColosseumFence)
+    @fences.local_each_value
+  end
+
+  def remove_fences
+    @fences.each_value do |fence|
+      fence.decay_me
+      fence.known_list.remove_all_known_objects
+    end
+
+    @fences.clear
   end
 
   def add_enter_location(loc : Location)
@@ -162,7 +182,7 @@ class Instance
     error e
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "instance") do |n|
       parse_instance(n)
     end
@@ -337,6 +357,17 @@ class Instance
             @buff_exception_list << temp
           end
         end
+      when "colosseumfencelist"
+        find_element(n, "colosseumfence") do |f|
+          x = parse_int(f, "x")
+          y = parse_int(f, "y")
+          z = parse_int(f, "z")
+          min_z = parse_int(f, "min_z")
+          max_z = parse_int(f, "max_z")
+          width = parse_int(f, "width")
+          height = parse_int(f, "height")
+          add_fence(x, y, z, min_z, max_z, width, height, L2ColosseumFence::FenceState::CLOSED)
+        end
       end
     end
   end
@@ -354,16 +385,16 @@ class Instance
         remaining = 0i64
       elsif remaining > 300_000 && empty_time_left > 300_000
         interval = 300_000
-        remaining -= 300_000
+        remaining &-= 300_000
       elsif remaining > 60_000 && empty_time_left > 60_000
         interval = 60_000
         remaining -= 60_000
       elsif remaining > 30_000 && empty_time_left > 30_000
         interval = 30_000
-        remaining -= 30_000
+        remaining &-= 30_000
       else
         interval = 10_000
-        remaining -= 10_000
+        remaining &-= 10_000
       end
     elsif remaining > 300_000
       time_left = remaining // 60_000
@@ -371,24 +402,24 @@ class Instance
       sm = SystemMessage.dungeon_expires_in_s1_minutes
       sm.add_string(time_left.to_s)
       Broadcast.to_players_in_instance(sm, id)
-      remaining -= 300_000
+      remaining &-= 300_000
     elsif remaining > 60_000
       time_left = remaining // 60_000
       interval = 60_000
       sm = SystemMessage.dungeon_expires_in_s1_minutes
       sm.add_string(time_left.to_s)
       Broadcast.to_players_in_instance(sm, id)
-      remaining -= 60_000
+      remaining &-= 60_000
     elsif remaining > 30_000
       time_left = remaining // 1000
       interval = 30_000
       cs = CreatureSay.new(0, Say2::ALLIANCE, "Notice", "#{time_left} seconds left")
-      remaining -= 30_000
+      remaining &-= 30_000
     else
       time_left = remaining // 1000
       interval = 10_000
       cs = CreatureSay.new(0, Say2::ALLIANCE, "Notice", "#{time_left} seconds left")
-      remaining -= 10_000
+      remaining &-= 10_000
     end
 
     if cs

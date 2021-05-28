@@ -1,3 +1,4 @@
+require "./skill_flags"
 require "../l2_extractable_product_item"
 require "../l2_extractable_skill"
 require "../../enums/skill_operate_type"
@@ -27,11 +28,11 @@ class Skill
   @extractable_items : L2ExtractableSkill?
   @operate_type : SkillOperateType
   @skill_type : SkillType
-  @pre_condition : Array(Condition)?
-  @item_pre_condition : Array(Condition)?
-  @func_templates : Array(FuncTemplate)?
-  @effect_types : EnumSet(EffectType)?
+  @pre_condition = Slice(Condition).empty
+  @item_pre_condition = Slice(Condition).empty
+  @effects_mask = 0u64
   @ride_state : EnumSet(MountType)?
+  @skill_flags = SkillFlags.new
 
   getter id : Int32
   getter level : Int32
@@ -78,20 +79,6 @@ class Skill
   getter channeling_skill_id : Int32
   getter channeling_tick_initial_delay : Int32
   getter channeling_tick_interval : Int32
-  getter? reuse_delay_locked : Bool
-  getter? stay_after_death : Bool
-  getter? stay_on_subclass_change : Bool
-  getter? recovery_herb : Bool
-  getter? next_action_is_attack : Bool
-  getter? blocked_in_olympiad : Bool
-  getter? dmg_directly_to_hp : Bool
-  getter? overhit : Bool
-  getter? debuff : Bool
-  getter? abnormal_instant : Bool
-  getter? suicide_attack : Bool
-  getter? irreplaceable_buff : Bool
-  getter? excluded_from_check : Bool
-  getter? simultaneous_cast : Bool
   property reference_item_id : Int32 = 0
 
   def initialize(set : StatsSet)
@@ -104,7 +91,7 @@ class Skill
     @operate_type = set.get_enum("operateType", SkillOperateType)
     @skill_type = SkillType[set.get_i32("isMagic", 0)]
     @trait_type = set.get_enum("trait", TraitType, TraitType::NONE)
-    @reuse_delay_locked = set.get_bool("reuseDelayLocked", false)
+    @skill_flags.reuse_delay_locked = set.get_bool("reuseDelayLocked", false)
     @mp_consume1 = set.get_i32("mpConsume1", 0)
     @mp_consume2 = set.get_i32("mpConsume2", 0)
     @mp_per_channeling = set.get_i32("mpPerChanneling", @mp_consume2)
@@ -129,17 +116,17 @@ class Skill
     end
 
     @abnormal_time = abnormal_time
-    @abnormal_instant = set.get_bool("abnormalInstant", false)
+    @skill_flags.abnormal_instant = set.get_bool("abnormalInstant", false)
 
     parse_abnormal_visual_effect(set.get_string("abnormalVisualEffect", nil))
 
-    @stay_after_death = set.get_bool("stayAfterDeath", false)
-    @stay_on_subclass_change = set.get_bool("stayOnSubclassChange", true)
+    @skill_flags.stay_after_death = set.get_bool("stayAfterDeath", false)
+    @skill_flags.stay_on_subclass_change = set.get_bool("stayOnSubclassChange", true)
     @hit_time = set.get_i32("hitTime", 0)
     @hit_cancel_time = set.get_i32("hitCancelTime", 0)
     @cool_time = set.get_i32("coolTime", 0)
-    @debuff = set.get_bool("isDebuff", false)
-    @recovery_herb = set.get_bool("isRecoveryHerb", false)
+    @skill_flags.debuff = set.get_bool("isDebuff", false)
+    @skill_flags.recovery_herb = set.get_bool("isRecoveryHerb", false)
 
     if Config.enable_modify_skill_reuse && (tmp = Config.skill_reuse_list[@id]?)
       @reuse_delay = tmp
@@ -158,11 +145,7 @@ class Skill
     end
 
     if tmp = set.get_string("affectLimit", nil)
-      begin
-        v1, v2 = tmp.split('-')
-      rescue e
-        raise "Invalid affectLimit value '#{tmp}' for skill id #{@id}"
-      end
+      v1, v2 = tmp.split('-')
       @affect_limit = {v1.to_i, v2.to_i}
     else
       @affect_limit = {0, 0}
@@ -175,21 +158,21 @@ class Skill
     @activate_rate = set.get_i32("activateRate", -1)
     @min_chance = set.get_i32("minChance", Config.min_abnormal_state_success_rate)
     @max_chance = set.get_i32("maxChance", Config.max_abnormal_state_success_rate)
-    @next_action_is_attack = set.get_bool("nextActionAttack", false)
-    @blocked_in_olympiad = set.get_bool("blockedInOlympiad", false)
+    @skill_flags.next_action_is_attack = set.get_bool("nextActionAttack", false)
+    @skill_flags.blocked_in_olympiad = set.get_bool("blockedInOlympiad", false)
     @attribute_type = set.get_enum("attributeType", AttributeType, AttributeType::NONE)
     @attribute_power = set.get_i32("attributePower", 0)
     @basic_property = set.get_enum("basicProperty", BaseStats, BaseStats::NONE)
-    @overhit = set.get_bool("overHit", false)
-    @suicide_attack = set.get_bool("isSuicideAttack", false)
+    @skill_flags.overhit = set.get_bool("overHit", false)
+    @skill_flags.suicide_attack = set.get_bool("isSuicideAttack", false)
     @min_pledge_class = set.get_i32("minPledgeClass", 0)
     @charge_consume = set.get_i32("chargeConsume", 0)
     @max_soul_consume_count = set.get_i32("soulMaxConsumeCount", 0)
-    @dmg_directly_to_hp = set.get_bool("dmgDirectlyToHp", false)
+    @skill_flags.dmg_directly_to_hp = set.get_bool("dmgDirectlyToHp", false)
     @effect_point = set.get_i32("effectPoint", 0)
-    @irreplaceable_buff = set.get_bool("irreplaceableBuff", false)
-    @excluded_from_check = set.get_bool("excludedFromCheck", false)
-    @simultaneous_cast = set.get_bool("simultaneousCast", false)
+    @skill_flags.irreplaceable_buff = set.get_bool("irreplaceableBuff", false)
+    @skill_flags.excluded_from_check = set.get_bool("excludedFromCheck", false)
+    @skill_flags.simultaneous_cast = set.get_bool("simultaneousCast", false)
     @icon = set.get_string("icon", "icon.skill0000")
     @channeling_skill_id = set.get_i32("channelingSkillId", 0)
     @channeling_tick_interval = set.get_i32("channelingTickInterval", 2) * 1000
@@ -286,21 +269,19 @@ class Skill
 
     conditions = item_or_weapon ? @item_pre_condition : @pre_condition
 
-    return true if conditions.nil? || conditions.empty?
+    return true if conditions.empty?
 
     target = object.as?(L2Character)
 
     conditions.each do |cond|
       unless cond.test(char, target, self)
-        msg = cond.message
-        msg_id = cond.message_id
-        if msg_id != 0
-          sm = Packets::Outgoing::SystemMessage[msg_id]
+        if cond.message_id != 0
+          sm = Packets::Outgoing::SystemMessage[cond.message_id]
           if cond.add_name?
             sm.add_skill_name(@id)
           end
           char.send_packet(sm)
-        elsif msg
+        elsif msg = cond.message
           char.send_message(msg)
         end
 
@@ -400,47 +381,29 @@ class Skill
   end
 
   def get_stat_funcs(effect : AbstractEffect?, char : L2Character) : Indexable(AbstractFunction)
-    unless (templates = @func_templates) && !templates.empty?
-      return Slice(AbstractFunction).empty
-    end
-
-    unless char.is_a?(L2Playable) || char.is_a?(L2Attackable)
-      return Slice(AbstractFunction).empty
-    end
-
-    ary = [] of AbstractFunction
-    templates.each do |t|
-      if f = t.get_func(char, nil, self, self)
-        ary << f
-      end
-    end
-    ary
+    Slice(AbstractFunction).empty
   end
 
   def has_effect_type?(*types : EffectType) : Bool
-    return false unless temp = @effect_types
-    types.any? { |t| temp.includes?(t) }
+    @effects_mask != 0 && types.any? { |t| @effects_mask & t.mask != 0 }
+  end
+
+  def add_effect(scope : EffectScope, effect : AbstractEffect)
+    @effects_mask |= effect.effect_type.mask
+    (@effect_lists[scope] ||= [] of AbstractEffect) << effect
   end
 
   def attach(cond : Condition?, item_or_weapon : Bool)
     return unless cond
 
     if item_or_weapon
-      (@item_pre_condition ||= [] of Condition) << cond
+      @item_pre_condition = @item_pre_condition.add(cond)
     else
-      (@pre_condition ||= [] of Condition) << cond
+      @pre_condition = @pre_condition.add(cond)
     end
   end
 
-  def add_effect(scope : EffectScope, effect : AbstractEffect)
-    unless effect.effect_type.none?
-      (@effect_types ||= EnumSet(EffectType).new) << effect.effect_type
-    end
-
-    (@effect_lists[scope] ||= [] of AbstractEffect) << effect
-  end
-
-  def activate_skill(caster : L2Character, *targets : L2Object) # custom
+  def activate_skill(caster : L2Character, *targets : L2Object)
     activate_skill(caster, targets)
   end
 
@@ -448,7 +411,7 @@ class Skill
     activate_skill(caster, nil, targets)
   end
 
-  def activate_skill(cubic : L2CubicInstance, *targets : L2Object) # custom
+  def activate_skill(cubic : L2CubicInstance, *targets : L2Object)
     activate_skill(cubic, targets)
   end
 
@@ -487,7 +450,6 @@ class Skill
           end
 
           apply_effect_scope(pvx_scope, info, true, false)
-
           apply_effect_scope(EffectScope::CHANNELING, info, true, false)
         else
           apply_effects(caster, target)
@@ -539,7 +501,7 @@ class Skill
     end
 
     if effected.invul_against?(id, level)
-      effected.send_debug_message { "Skill #{to_s} has been ignored (invul against)" }
+      effected.send_debug_message { "Skill #{self} has been ignored (invul against)" }
       return
     end
 
@@ -659,6 +621,62 @@ class Skill
 
   def seven_signs? : Bool
     @id.between?(4361, 4366)
+  end
+
+  def reuse_delay_locked? : Bool
+    @skill_flags.reuse_delay_locked?
+  end
+
+  def stay_after_death? : Bool
+    @skill_flags.stay_after_death?
+  end
+
+  def stay_on_subclass_change? : Bool
+    @skill_flags.stay_on_subclass_change?
+  end
+
+  def recovery_herb? : Bool
+    @skill_flags.recovery_herb?
+  end
+
+  def next_action_is_attack? : Bool
+    @skill_flags.next_action_is_attack?
+  end
+
+  def blocked_in_olympiad? : Bool
+    @skill_flags.blocked_in_olympiad?
+  end
+
+  def dmg_directly_to_hp? : Bool
+    @skill_flags.dmg_directly_to_hp?
+  end
+
+  def overhit? : Bool
+    @skill_flags.overhit?
+  end
+
+  def debuff? : Bool
+    @skill_flags.debuff?
+  end
+
+  def abnormal_instant? : Bool
+    @skill_flags.abnormal_instant?
+  end
+
+  def suicide_attack? : Bool
+    @skill_flags.suicide_attack?
+  end
+
+  def irreplaceable_buff? : Bool
+    @skill_flags.irreplaceable_buff?
+  end
+
+  def excluded_from_check? : Bool
+    @skill_flags.excluded_from_check?
+  end
+
+  def simultaneous_cast? : Bool
+    @skill_flags.simultaneous_cast?
   end
 
   def to_s(io : IO)

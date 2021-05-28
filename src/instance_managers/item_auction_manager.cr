@@ -49,7 +49,7 @@ module ItemAuctionManager
     error e
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |list|
       find_element(list, "instance") do |nb|
         instance_id = parse_int(nb, "id")

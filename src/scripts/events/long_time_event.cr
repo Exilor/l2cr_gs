@@ -37,7 +37,7 @@ class LongTimeEvent < Quest
     end
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     first_node = get_first_element_child(doc).not_nil!
 
     unless get_node_name(first_node).casecmp?("event")

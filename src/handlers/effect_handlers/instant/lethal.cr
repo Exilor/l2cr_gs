@@ -2,7 +2,7 @@ class EffectHandler::Lethal < AbstractEffect
   @full_lethal : Float64
   @half_lethal : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @full_lethal = params.get_f64("fullLethal", 0)

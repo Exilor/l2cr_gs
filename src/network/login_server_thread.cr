@@ -67,7 +67,7 @@ class LoginServerThread
   private def read_loop
     info { "Trying to connect to LoginServer at #{@host}:#{@port}" }
     @socket = TCPSocket.new(@host, @port)
-    @crypt = NewCrypt.new("_;v.]05-31!|+-%xT!^[$\00".bytes)
+    @crypt = NewCrypt.new("_;v.]05-31!|+-%xT!^[$\00")
     until cancelled?
       IN_BUFFER.clear
 

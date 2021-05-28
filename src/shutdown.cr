@@ -152,7 +152,7 @@ class Shutdown
   def start_shutdown(pc, seconds, restart)
     @shutdown_mode = restart ? GM_RESTART : GM_SHUTDOWN
 
-    warn { "GM #{pc.try &.name} issued #{MODE_TEXT[@shutdown_mode]} in #{seconds} seconds." }
+    warn { "GM #{pc} issued #{MODE_TEXT[@shutdown_mode]} in #{seconds} seconds." }
 
     if @shutdown_mode > 0
       case seconds

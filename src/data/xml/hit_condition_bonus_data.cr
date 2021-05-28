@@ -14,7 +14,7 @@ module HitConditionBonusData
     parse_datapack_file("stats/hitConditionBonus.xml")
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     each_element(doc) do |n|
       each_element(n) do |d, d_name|
         case d_name.casecmp

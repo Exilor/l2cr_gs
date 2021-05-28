@@ -294,7 +294,7 @@ class Scripts::Antharas < AbstractNpcAI
     when "TID_USED_FEAR"
       if npc && @sandstorm == 0
         @sandstorm = 1
-        npc.disable_core_ai(true)
+        npc.core_ai_disabled = true
         npc.set_intention(AI::MOVE_TO, Location.new(177648, 114816, -7735))
         start_quest_timer("TID_FEAR_MOVE_TIMEOVER", 2000, npc, nil)
         start_quest_timer("TID_FEAR_COOLTIME", 300_000, npc, nil)
@@ -306,7 +306,7 @@ class Scripts::Antharas < AbstractNpcAI
       if @sandstorm == 1 && npc.x == 177648 && npc.y == 114816
         @sandstorm = 2
         @move_chance = 0
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
         INVISIBLE_NPC.each { |k, v| add_spawn(k, v) }
       elsif @sandstorm == 1
         if @move_chance <= 3
@@ -401,7 +401,7 @@ class Scripts::Antharas < AbstractNpcAI
       end
     elsif npc.id == ANTHARAS
       if !@zone.character_in_zone?(attacker) || get_status != IN_FIGHT
-        warn { "Player #{attacker.name} attacked Antharas in invalid conditions." }
+        warn { "Player #{attacker} attacked Antharas in invalid conditions." }
         attacker.tele_to_location(80464, 152294, -3534)
       end
 

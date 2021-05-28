@@ -66,7 +66,7 @@ abstract class L2Character < L2Object
   property last_simultaneous_skill_cast : Skill?
   property team : Team = Team::NONE
   property summoner : L2Character?
-  property! template : L2CharTemplate
+  property template : L2CharTemplate
 
   def initialize(template : L2CharTemplate)
     initialize(IdFactory.next, template)
@@ -273,6 +273,10 @@ abstract class L2Character < L2Object
     @char_flags.core_ai_disabled?
   end
 
+  def core_ai_disabled=(val : Bool)
+    @char_flags.core_ai_disabled = val
+  end
+
   def pending_revive=(val : Bool)
     @char_flags.pending_revive = val
   end
@@ -472,9 +476,7 @@ abstract class L2Character < L2Object
   end
 
   def get_item_remaining_reuse_time(item_l2id : Int32) : Int64
-    sync do
-      @reuse_time_stamp_items.try &.[item_l2id]?.try &.remaining || -1i64
-    end
+    sync { @reuse_time_stamp_items.try &.[item_l2id]?.try &.remaining || -1i64 }
   end
 
   def get_reuse_delay_on_group(group : Int32) : Int64
@@ -489,7 +491,7 @@ abstract class L2Character < L2Object
     -1i64
   end
 
-  def item_reuse_time_stamps# : Concurrent::Map(Int32, TimeStamp)?
+  def item_reuse_time_stamps : Concurrent::Map(Int32, TimeStamp)?
     @reuse_time_stamp_items
   end
 
@@ -499,15 +501,15 @@ abstract class L2Character < L2Object
 
   def add_time_stamp(skill : Skill, reuse : Int64, time : Int64)
     unless temp = @reuse_time_stamp_skills
-      sync do
-        temp = @reuse_time_stamp_skills ||= Concurrent::Map(Int32, TimeStamp).new
+      temp = sync do
+        @reuse_time_stamp_skills ||= Concurrent::Map(Int32, TimeStamp).new
       end
     end
 
-    temp.not_nil![skill.hash] = TimeStamp.new(skill, reuse, time)
+    temp[skill.hash] = TimeStamp.new(skill, reuse, time)
   end
 
-  def skill_reuse_time_stamps# : Concurrent::Map(Int32, TimeStamp)?
+  def skill_reuse_time_stamps : Concurrent::Map(Int32, TimeStamp)?
     @reuse_time_stamp_skills
   end
 
@@ -526,7 +528,8 @@ abstract class L2Character < L2Object
   def has_skill_reuse?(hash : Int32) : Bool?
     sync do
       return false unless temp = @reuse_time_stamp_skills
-      temp[hash]?.try &.has_not_passed? || false
+      return false unless ts = temp[hash]?
+      ts.has_not_passed?
     end
   end
 
@@ -541,12 +544,12 @@ abstract class L2Character < L2Object
   def disable_skill(skill : Skill?, delay : Int64)
     return unless skill
 
-    unless @disabled_skills
-      sync { @disabled_skills ||= Concurrent::Map(Int32, Int64).new }
+    unless temp = @disabled_skills
+      temp = sync { @disabled_skills ||= Concurrent::Map(Int32, Int64).new }
     end
 
     delay = delay > 0 ? Time.ms + delay : Int64::MAX
-    @disabled_skills.not_nil![skill.hash] = delay
+    temp[skill.hash] = delay
   end
 
   def enable_skill(skill : Skill?)
@@ -564,21 +567,9 @@ abstract class L2Character < L2Object
   end
 
   def skill_disabled?(hash : Int32) : Bool
-    if all_skills_disabled?
-      return true
-    end
-
-    if all_skills_disabled?
-      return true
-    end
-
-    unless temp = @disabled_skills
-      return false
-    end
-
-    unless stamp = temp[hash]?
-      return false
-    end
+    return true if all_skills_disabled?
+    return false unless temp = @disabled_skills
+    return false unless stamp = temp[hash]?
 
     if stamp < Time.ms
       temp.delete(hash)
@@ -682,17 +673,14 @@ abstract class L2Character < L2Object
   end
 
   def do_die(killer : L2Character?) : Bool
-    if killer # custom
-      evt = OnCreatureKill.new(killer, self)
-      term = EventDispatcher.notify(evt, self, TerminateReturn)
-      if term && term.terminate
-        return false
-      end
+    evt = OnCreatureKill.new(killer, self)
+    term = EventDispatcher.notify(evt, self, TerminateReturn)
+    if term && term.terminate
+      return false
     end
 
     sync do
       if dead?
-        puts "already dead"
         return false
       end
 
@@ -1734,8 +1722,6 @@ abstract class L2Character < L2Object
       raise "Nil targets given to L2Character#call_skill"
     end
 
-    active_weapon = active_weapon_item
-
     if skill.toggle? && affected_by_skill?(skill.id)
       return
     end
@@ -1773,6 +1759,7 @@ abstract class L2Character < L2Object
       end
 
       unless skill.static?
+        active_weapon = active_weapon_item
         if active_weapon && target.alive?
           active_weapon.cast_on_magic_skill(self, target, skill)
         end
@@ -2705,15 +2692,11 @@ abstract class L2Character < L2Object
 
     case attack_type
     when WeaponType::BOW
-      unless can_use_range_weapon?
-        return
-      end
+      return if player? && !can_use_range_weapon?
       @attack_end_time = Time.ms + time_to_hit + (reuse // 2)
       hitted = do_attack_hit_by_bow(attack, target, time_atk, reuse)
     when WeaponType::CROSSBOW
-      unless can_use_range_weapon?
-        return
-      end
+      return if player? && !can_use_range_weapon?
       @attack_end_time = Time.ms + time_to_hit + (reuse // 2)
       hitted = do_attack_hit_by_crossbow(attack, target, time_atk, reuse)
     when WeaponType::POLE
@@ -3268,10 +3251,6 @@ abstract class L2Character < L2Object
   def attacking_disabled? : Bool
     flying? || stunned? || sleeping? || attacking_now? || looks_dead? ||
       paralyzed? || physical_attack_muted? || core_ai_disabled?
-  end
-
-  def disable_core_ai(val : Bool)
-    @char_flags.core_ai_disabled = val
   end
 
   def give_raid_curse? : Bool

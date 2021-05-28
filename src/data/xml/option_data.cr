@@ -15,7 +15,7 @@ module OptionData
     info { "Loaded #{OPTION_DATA.size} options in #{timer} s." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "option") do |d|
         id = parse_int(d, "id")

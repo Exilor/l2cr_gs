@@ -304,7 +304,7 @@ class Scripts::Q00350_EnhanceYourWeapon < Quest
     info { "Loaded #{NPC_LEVELING_INFO.size} NPC Leveling info data." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |list|
       each_element(list) do |n, n_name|
         case n_name.casecmp

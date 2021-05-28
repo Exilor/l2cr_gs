@@ -144,7 +144,7 @@ class Scripts::QueenAnt < AbstractNpcAI
       mob.mortal = false
       mob.raid_minion = true
     when NURSE
-      mob.disable_core_ai(true)
+      mob.core_ai_disabled = true
       mob.raid_minion = true
       NURSES << mob
     when ROYAL, GUARD

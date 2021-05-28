@@ -6,7 +6,7 @@ class EffectHandler::SummonCubic < AbstractEffect
   @cubic_max_count : Int32
   @cubic_skill_chance : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @cubic_id = params.get_i32("cubicId", -1)

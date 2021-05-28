@@ -36,12 +36,12 @@ class Packets::Incoming::TradeRequest < GameClientPacket
     end
 
     unless pc.known_list.knows_object?(target)
-      debug { "#{target.name} isn't known by #{pc}." }
+      debug { "#{target} isn't known by #{pc}." }
       return
     end
 
     if target.instance_id != pc.instance_id && pc.instance_id != -1
-      debug { "#{target.name} is not in the same instance as #{pc}." }
+      debug { "#{target} is not in the same instance as #{pc}." }
       return
     end
 

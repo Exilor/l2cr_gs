@@ -14,7 +14,7 @@ module EnchantItemHPBonusData
     info { "Loaded #{ARMOR_HP_BONUSES.size} enchant HP bonuses." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "enchantHP") do |d|
         bonuses = [] of Int32

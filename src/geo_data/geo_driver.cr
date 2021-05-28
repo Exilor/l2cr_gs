@@ -60,7 +60,7 @@ module GeoDriver
         size = f.size
         slice = GC.malloc_atomic(size).as(UInt8*).to_slice(size)
         f.read_fully(slice)
-        io = IO::Memory.new(slice)
+        io = ByteBuffer.new(slice)
         REGIONS[offset] = Region.new(io)
       end
     end

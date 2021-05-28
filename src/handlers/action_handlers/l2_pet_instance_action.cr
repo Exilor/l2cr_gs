@@ -2,7 +2,7 @@ module ActionHandler::L2PetInstanceAction
   extend self
   extend ActionHandler
 
-  def action(pc, target, interact) : Bool
+  def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
     if pc.locked_target? && pc.locked_target != target
       pc.send_packet(SystemMessageId::FAILED_CHANGE_TARGET)
       return false

@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminTest
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_stats"
       pc.send_message("\"admin_stats\" not available.")
     elsif command.starts_with?("admin_skill_test")

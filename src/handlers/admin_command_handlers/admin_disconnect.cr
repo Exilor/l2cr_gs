@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminDisconnect
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == commands[0]
       disconnect_character(pc)
     end
@@ -16,7 +16,7 @@ module AdminCommandHandler::AdminDisconnect
     if target == pc
       pc.send_message("You cannot log out your own character.")
     else
-      pc.send_message("Player #{target.name} disconnected from server.")
+      pc.send_message("Player #{target} disconnected from server.")
       target.logout
     end
   end

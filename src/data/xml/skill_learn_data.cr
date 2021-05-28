@@ -10,7 +10,7 @@ module SkillLearnData
     info { "Loaded #{SKILL_LEARN.size} Skill learn data." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "npc") do |l|
         class_ids = [] of ClassId

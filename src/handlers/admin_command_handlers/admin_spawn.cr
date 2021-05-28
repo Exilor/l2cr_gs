@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminSpawn
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_show_spawns"
       AdminHtml.show_admin_html(pc, "spawns.htm")
     elsif command.casecmp?("admin_spawn_debug_menu")

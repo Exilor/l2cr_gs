@@ -13,7 +13,7 @@ module PetDataTable
     info { "Loaded #{PETS.size} pet data in #{timer}." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "pets") do |n|
       find_element(n, "pet") do |d|
         npc_id = parse_int(d, "id")

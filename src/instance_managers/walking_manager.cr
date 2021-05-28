@@ -170,7 +170,7 @@ module WalkingManager
     end
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     each_element(doc) do |n|
       find_element(n, "route") do |d|
         route_name = parse_string(d, "name")

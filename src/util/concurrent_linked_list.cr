@@ -1,14 +1,9 @@
-# Thread-safe doubly-linked list.
-class ConcurrentLinkedList(E)
+# Thread-safe linked list ported from Java's ConcurrentLinkedQueue.
+struct ConcurrentLinkedList(E)
   include Enumerable(E)
 
   private class Node(E)
-    def initialize(item : E?)
-      @item_updater = Atomic(E?).new(item)
-      @succ_updater = Atomic(self?).new(nil)
-    end
-
-    def initialize(item : E?, succ : self?)
+    def initialize(item : E?, succ : self? = nil)
       @item_updater = Atomic(E?).new(item)
       @succ_updater = Atomic(self?).new(succ)
     end

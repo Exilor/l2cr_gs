@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminFightCalculator
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     begin
       if command.starts_with?("admin_fight_calculator_show")
         handle_show(command.from("admin_fight_calculator_show".size), pc)

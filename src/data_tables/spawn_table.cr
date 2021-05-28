@@ -192,7 +192,7 @@ module SpawnTable
     false
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |list|
       next if parse_bool(list, "enabled", nil) == false
 

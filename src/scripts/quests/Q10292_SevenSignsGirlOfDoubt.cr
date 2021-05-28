@@ -108,13 +108,13 @@ class Scripts::Q10292_SevenSignsGirlOfDoubt < Quest
           st.set_cond(4, true)
         end
       else
-        kill_count = st.get_int("kill_count")
+        kill_count = st.get_int("q10292_kill_count")
         if kill_count < 0
           kill_count = 1
         else
           kill_count &+= 1
         end
-        st.set("kill_count", kill_count.to_s)
+        st.set("q10292_kill_count", kill_count.to_s)
         if kill_count == 2
           st.memo_state = 6
           st.set_cond(6)

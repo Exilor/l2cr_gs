@@ -1,7 +1,7 @@
 class EffectHandler::CrystalGradeModify < AbstractEffect
   @grade : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @grade = params.get_i32("grade", 0)
   end

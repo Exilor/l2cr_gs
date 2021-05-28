@@ -101,7 +101,7 @@ class Scripts::Q00501_ProofOfClanAlliance < Quest
           npc.script_value = 0
           LOCS.each do |loc|
             box = add_spawn(npc, Rnd.rand(BOX_OF_ATHREA_1..BOX_OF_ATHREA_5), loc, false, 300_000)
-            box.disable_core_ai(true)
+            box.core_ai_disabled = true
             box.no_random_walk = true
           end
           html = event

@@ -3,7 +3,7 @@ class EffectHandler::Backstab < AbstractEffect
   @blow_chance : Int32
   @critical_chance : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @power = params.get_f64("power", 0)

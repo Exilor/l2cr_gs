@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminMammon
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     teleport_index = -1
     black_sp = AutoSpawnHandler.get_auto_spawn_instance(SevenSigns::MAMMON_BLACKSMITH_ID, false)
     merch_sp = AutoSpawnHandler.get_auto_spawn_instance(SevenSigns::MAMMON_MERCHANT_ID, false)

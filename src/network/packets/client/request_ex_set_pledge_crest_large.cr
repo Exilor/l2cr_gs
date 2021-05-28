@@ -1,6 +1,6 @@
 class Packets::Incoming::RequestExSetPledgeCrestLarge < GameClientPacket
   @size = 0
-  @data : Bytes?
+  @data = Bytes.empty
 
   private def read_impl
     @size = d
@@ -13,7 +13,7 @@ class Packets::Incoming::RequestExSetPledgeCrestLarge < GameClientPacket
   private def run_impl
     return unless pc = active_char
     return unless clan = pc.clan
-    return unless data = @data
+    return if @data.empty?
 
     unless @size.between?(0, 2176)
       pc.send_packet(SystemMessageId::WRONG_SIZE_UPLOADED_CREST)
@@ -41,7 +41,7 @@ class Packets::Incoming::RequestExSetPledgeCrestLarge < GameClientPacket
         return
       end
 
-      if crest = CrestTable.create_crest(data, L2Crest::PLEDGE_LARGE)
+      if crest = CrestTable.create_crest(@data, L2Crest::PLEDGE_LARGE)
         clan.change_large_crest(crest.id)
         pc.send_packet(SystemMessageId::CLAN_EMBLEM_WAS_SUCCESSFULLY_REGISTERED)
       else

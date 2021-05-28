@@ -1,7 +1,7 @@
 class EffectHandler::ConsumeMp < AbstractEffect
   @power : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @power = params.get_f64("power", 0)

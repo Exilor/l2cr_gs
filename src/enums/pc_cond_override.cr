@@ -19,7 +19,7 @@ enum PcCondOverride : UInt8
   def description : String
     case self
     when MAX_STATS_VALUE
-      "Overrides maximum states conditions"
+      "Overrides maximum stats conditions"
     when ITEM_CONDITIONS
       "Overrides item usage conditions"
     when SKILL_CONDITIONS

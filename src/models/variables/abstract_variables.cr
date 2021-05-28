@@ -3,7 +3,7 @@ require "../interfaces/script_type"
 abstract class AbstractVariables < StatsSet
   include ScriptType
 
-  private class AtomicBool
+  private struct AtomicBool
     def initialize(value : Bool)
       @atomic = Atomic(UInt8).new(coerce(value))
     end
@@ -58,7 +58,7 @@ abstract class AbstractVariables < StatsSet
     @has_changes.compare_and_set(expect, update)[1]
   end
 
-  def to_s(io)
+  def to_s(io : IO)
     io << {{@type.stringify}}
   end
 end

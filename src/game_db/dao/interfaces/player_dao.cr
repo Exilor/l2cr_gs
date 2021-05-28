@@ -1,8 +1,6 @@
 module GameDB
   module PlayerDAO
-    macro extended
-      include Loggable
-    end
+    include Loggable
 
     abstract def load(l2id : Int32) : L2PcInstance?
   end

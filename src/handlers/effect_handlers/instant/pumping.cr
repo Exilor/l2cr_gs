@@ -1,7 +1,7 @@
 class EffectHandler::Pumping < AbstractEffect
   @power : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     unless params.get_string("power", nil)

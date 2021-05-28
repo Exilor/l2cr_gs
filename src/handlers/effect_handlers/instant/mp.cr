@@ -2,7 +2,7 @@ class EffectHandler::Mp < AbstractEffect
   @amount : Float64
   @mode : EffectCalculationType
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @amount = params.get_f64("amount", 0)
@@ -49,6 +49,8 @@ class EffectHandler::Mp < AbstractEffect
       if amount != 0
         target.current_mp += amount
       end
+
+      return unless target.acting_player
 
       if char && char != target
         sm = SystemMessage.s2_mp_has_been_restored_by_c1

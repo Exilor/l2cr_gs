@@ -2,14 +2,14 @@ module AdminCommandHandler::AdminGmChat
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(cmd, pc)
-    if cmd.starts_with?("admin_gmchat")
-      handle_gm_chat(cmd, pc)
-    elsif cmd.starts_with?("admin_snoop")
-      snoop(cmd, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
+    if command.starts_with?("admin_gmchat")
+      handle_gm_chat(command, pc)
+    elsif command.starts_with?("admin_snoop")
+      snoop(command, pc)
     end
 
-    if cmd.starts_with?("admin_gmchat_menu")
+    if command.starts_with?("admin_gmchat_menu")
       AdminHtml.show_admin_html(pc, "gm_menu.htm")
     end
 

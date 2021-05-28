@@ -2,7 +2,7 @@ module TargetHandler::AuraFriendly
   extend self
   extend TargetHandler
 
-  def get_target_list(skill, char, only_first, target) : Array(L2Object)
+  def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     player = char.acting_player.not_nil!
 
     if target.nil? || (!check_target(player, target) && skill.cast_range >= 0)

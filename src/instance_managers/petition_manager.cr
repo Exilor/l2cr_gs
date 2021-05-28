@@ -83,9 +83,7 @@ module PetitionManager
   end
 
   def end_active_petition(pc : L2PcInstance) : Bool
-    unless pc.gm?
-      return false
-    end
+    return false unless pc.gm?
 
     pending_petitions.each_value do |cur_pt|
       if cur_pt.responder? && cur_pt.responder.l2id == pc.l2id
@@ -127,7 +125,7 @@ module PetitionManager
   end
 
   def petition_in_process? : Bool
-    pending_petitions.local_each_value.any? &.state.in_process?
+    pending_petitions.any? { |_, v| v.state.in_process? }
   end
 
   def petition_in_process?(petition_id : Int32) : Bool

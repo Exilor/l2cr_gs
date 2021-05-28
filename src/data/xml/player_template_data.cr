@@ -14,7 +14,7 @@ module PlayerTemplateData
     info { "Loaded #{TEMPLATES.size} templates in #{timer} s." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     set = StatsSet.new
     class_id = 0
     data_count = 0
@@ -57,8 +57,7 @@ module PlayerTemplateData
           end
           set["basePDef"] = set.get_i32("basePDefchest", 0) &+ set.get_i32("basePDeflegs", 0) &+ set.get_i32("basePDefhead", 0) &+ set.get_i32("basePDeffeet", 0) &+ set.get_i32("basePDefgloves", 0) &+ set.get_i32("basePDefunderwear", 0) &+ set.get_i32("basePDefcloak", 0)
           set["baseMDef"] = set.get_i32("baseMDefrear", 0) &+ set.get_i32("baseMDeflear", 0) &+ set.get_i32("baseMDefrfinger", 0) &+ set.get_i32("baseMDefrfinger", 0) &+ set.get_i32("baseMDefneck", 0)
-          template = L2PcTemplate.new(set)
-          TEMPLATES[ClassId[class_id]] = template
+          TEMPLATES[ClassId[class_id]] = L2PcTemplate.new(set)
          when "lvlUpgainData"
           find_element(d, "level") do |ln|
             level = parse_int(ln, "val")

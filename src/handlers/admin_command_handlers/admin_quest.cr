@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminQuest
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?("admin_quest_reload")
       pc.send_message("admin_quest_reload is not implemented.")
     elsif command.starts_with?("admin_script_load")

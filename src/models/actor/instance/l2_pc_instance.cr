@@ -55,6 +55,7 @@ require "../../../community_bbs/forum"
 
 class L2PcInstance < L2Playable
   include Loggable
+  extend Loggable
 
   ID_NONE = -1
   REQUEST_TIMEOUT = 15
@@ -264,11 +265,12 @@ class L2PcInstance < L2Playable
   def initialize(l2id : Int32, class_id : Int32, account_name : String, appearance : PcAppearance)
     super(l2id, PlayerTemplateData[class_id])
 
-    self.can_revive = true
 
     @account_name = account_name
     @appearance = appearance
     @appearance.owner = self
+
+    self.can_revive = true
 
     ai # initializes AI
 
@@ -308,9 +310,7 @@ class L2PcInstance < L2Playable
   end
 
   def self.load(l2id : Int32) : L2PcInstance?
-    unless pc = GameDB.player.load(l2id)
-      return
-    end
+    return unless pc = GameDB.player.load(l2id)
 
     GameDB.player.load_characters(pc)
 
@@ -1335,7 +1335,7 @@ class L2PcInstance < L2Playable
       return false
     end
 
-    if skill.toggle? && affected_by_skill?(skill.id) # should be after "if sitting?"
+    if skill.toggle? && affected_by_skill?(skill.id)
       stop_skill_effects(true, skill.id)
       action_failed
       return false
@@ -1355,7 +1355,6 @@ class L2PcInstance < L2Playable
       return false
     end
 
-    # debug "before target check"
     case target_type
     when .aura?, .front_aura?, .behind_aura?, .party?, .clan?, .party_clan?,
          .ground?, .self?, .area_summon?, .aura_corpse_mob?, .command_channel?,
@@ -4996,6 +4995,7 @@ class L2PcInstance < L2Playable
       if invul?
         send_message("Entering world in invulnerable mode.")
       end
+
       if invisible?
         send_message("Entering world in invisible mode.")
       end
@@ -5019,6 +5019,18 @@ class L2PcInstance < L2Playable
       end
     rescue e
       error e
+    end
+
+    all_shortcuts.each do |sc|
+      if sc.type.item? && (item = inventory.get_item_by_l2id(sc.id))
+        if item.shared_reuse_group == sc.shared_reuse_group
+          reuse = get_item_remaining_reuse_time(item.l2id).to_i32
+          if reuse > 0
+            ex = ExUseSharedGroupItem.new(item.id, item.shared_reuse_group, reuse, item.reuse_delay)
+            send_packet(ex)
+          end
+        end
+      end
     end
 
     OnPlayerLogin.new(self).async(self)
@@ -5315,51 +5327,6 @@ class L2PcInstance < L2Playable
     end
 
     karma > 0 || pvp_flag > 0
-  end
-
-  def can_attack_character?(char : L2Character) : Bool
-    case char
-    when L2Attackable
-      return true
-    when L2Playable
-      if char.inside_pvp_zone? && !char.inside_siege_zone?
-        return true
-      end
-
-      if char.is_a?(L2Summon)
-        target = char.owner
-      else
-        target = char
-      end
-
-      if in_duel? && target.in_duel? && target.duel_id == duel_id
-        return true
-      elsif (party = party()) && (target_party = target.party)
-        if party == target_party
-          return false
-        end
-        cc = party.command_channel
-        if cc && cc == target_party.command_channel
-          return false
-        end
-      elsif (clan = clan()) && (target_clan = target.clan)
-        if clan_id == target.clan_id
-          return false
-        end
-        if (ally_id > 0 || target.ally_id > 0) && ally_id == target.ally_id
-          return false
-        end
-        if clan.at_war_with?(target_clan.id) && target_clan.at_war_with?(clan.id)
-          return true
-        end
-      elsif clan? || target.clan
-        if target.pvp_flag == 0 && target.karma == 0
-          return false
-        end
-      end
-    end
-
-    true
   end
 
   def processing_request? : Bool
@@ -5992,12 +5959,12 @@ class L2PcInstance < L2Playable
 
   def can_make_social_action? : Bool
     private_store_type.none? &&
-    !active_requester &&
-    !looks_dead? &&
-    !all_skills_disabled? &&
-    !casting_now? &&
-    !casting_simultaneously_now? &&
-    intention.idle?
+      !active_requester &&
+      !looks_dead? &&
+      !all_skills_disabled? &&
+      !casting_now? &&
+      !casting_simultaneously_now? &&
+      intention.idle?
   end
 
   def can_revive? : Bool

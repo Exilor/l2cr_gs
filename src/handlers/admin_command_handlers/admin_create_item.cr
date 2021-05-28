@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminCreateItem
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     case command
     when "admin_itemcreate"
       AdminHtml.show_admin_html(pc, "itemcreation.htm")

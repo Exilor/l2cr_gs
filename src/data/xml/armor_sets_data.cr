@@ -20,7 +20,7 @@ module ArmorSetsData
     SETS.has_key?(id)
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "set") do |d|
         set = ArmorSet.new

@@ -1,20 +1,18 @@
 require "./abstract_player_group"
 
 class L2CommandChannel < AbstractPlayerGroup
-  @party : L2Party
-
   getter leader : L2PcInstance
   getter level : Int32
   getter parties : Concurrent::Array(L2Party)
 
   def initialize(leader : L2PcInstance)
     @leader = leader
-    @party = leader.party.not_nil!
-    @parties = Concurrent::Array { @party }
-    @level = @party.level
-    @party.command_channel = self
-    @party.broadcast_message(SystemMessageId::COMMAND_CHANNEL_FORMED)
-    @party.broadcast_packet(ExOpenMPCC::STATIC_PACKET)
+    party = leader.party.not_nil!
+    @parties = Concurrent::Array { party }
+    @level = party.level
+    party.command_channel = self
+    party.broadcast_message(SystemMessageId::COMMAND_CHANNEL_FORMED)
+    party.broadcast_packet(ExOpenMPCC::STATIC_PACKET)
   end
 
   def add_party(party : L2Party)
@@ -51,7 +49,7 @@ class L2CommandChannel < AbstractPlayerGroup
 
   def members : Array(L2PcInstance)
     members = Array(L2PcInstance).new(size)
-    parties.each { |party| party.members.each { |m| members << m } }
+    parties.each { |party| members.concat(members) }
     members
   end
 
@@ -63,10 +61,7 @@ class L2CommandChannel < AbstractPlayerGroup
   end
 
   def meets_raid_war_condition?(obj : L2Object) : Bool
-    unless obj.is_a?(L2Character) && obj.raid?
-      return false
-    end
-
+    return false unless obj.is_a?(L2Character) && obj.raid?
     size >= Config.loot_raids_privilege_cc_size
   end
 

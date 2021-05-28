@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminInstanceZone
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     target = pc.target.try &.name || "no-target"
     GMAudit.log(pc, command, target, "")
 

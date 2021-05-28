@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminMenu
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_char_manage"
       show_main_page(pc)
     elsif command.starts_with?("admin_teleport_character_to_menu")
@@ -78,7 +78,7 @@ module AdminCommandHandler::AdminMenu
         player = st.shift
         if plyr = L2World.get_player(player)
           plyr.logout
-          text = "You kicked #{plyr.name} from the game."
+          text = "You kicked #{plyr} from the game."
         else
           text = "Player #{player} not found in the game."
         end
@@ -123,7 +123,7 @@ module AdminCommandHandler::AdminMenu
     if player
       if plyr = L2World.get_player(player)
         target = plyr
-        pc.send_message("You killed #{plyr.name}")
+        pc.send_message("You killed #{plyr}")
       end
     end
     if target

@@ -1,7 +1,7 @@
 class EffectHandler::Confuse < AbstractEffect
   @chance : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @chance = params.get_f64("chance", 100)
   end
@@ -10,7 +10,7 @@ class EffectHandler::Confuse < AbstractEffect
     Formulas.probability(@chance, info.effector, info.effected, info.skill)
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::CONFUSED.mask
   end
 

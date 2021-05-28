@@ -4,7 +4,7 @@ class EffectHandler::TriggerSkillByAvoid < AbstractEffect
   @chance : Int32
   @target_type : TargetType
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @chance = params.get_i32("chance", 100)

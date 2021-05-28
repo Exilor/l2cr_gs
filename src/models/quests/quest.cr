@@ -3,6 +3,8 @@ require "./quest_timer"
 require "./state"
 
 class Quest < AbstractScript
+  extend Loggable
+
   private DEFAULT_NO_QUEST_MSG = "<html><body>You are either not on a quest that involves this NPC, or you don't meet this NPC's minimum quest requirements.</body></html>"
   private DEFAULT_ALREADY_COMPLETED_MSG = "<html><body>This quest has already been completed.</body></html>"
 
@@ -1000,7 +1002,7 @@ class Quest < AbstractScript
 
   def can_start_quest?(pc : L2PcInstance) : Bool
     conds = @start_condition
-    conds.nil? || conds.local_each_key.all? &.call(pc)
+    conds.nil? || conds.all? { |cond, _| cond.call(pc) }
   end
 
   def get_start_condition_html(pc : L2PcInstance) : String?

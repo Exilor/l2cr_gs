@@ -25,7 +25,7 @@ module CursedWeaponsManager
     info { "Loaded #{CURSED_WEAPONS.size} cursed weapons." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "item") do |d|
         id = parse_int(d, "id")
@@ -204,7 +204,5 @@ module CursedWeaponsManager
 
   def give_passive(item_id : Int)
     CURSED_WEAPONS[item_id].give_skill
-  rescue e
-    warn e # L2J doesn't do anything with the error
   end
 end

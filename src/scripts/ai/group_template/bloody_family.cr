@@ -20,7 +20,7 @@ class Scripts::BloodyFamily < AbstractNpcAI
     when "CORE_AI"
       if npc.is_a?(L2Attackable)
         npc.clear_aggro_list
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
         start_quest_timer("RETURN_SPAWN", 300_000, npc, nil)
       end
     when "RETURN_SPAWN"
@@ -36,7 +36,7 @@ class Scripts::BloodyFamily < AbstractNpcAI
     if npc.id.in?(FAMILY)
       dist_spawn = npc.calculate_distance(npc.spawn, false, false)
       if dist_spawn > 3000
-        npc.disable_core_ai(true)
+        npc.core_ai_disabled = true
         npc.tele_to_location(npc.spawn)
       else
         if dist_spawn > 500 && npc.in_combat? && !npc.casting_now? && Rnd.rand(100) < 1
@@ -47,7 +47,7 @@ class Scripts::BloodyFamily < AbstractNpcAI
               range = obj.template.clan_help_range
               next unless npc.calculate_distance(obj, false, false).between?(range, 3000)
               next unless GeoData.can_see_target?(npc, obj)
-              npc.disable_core_ai(true)
+              npc.core_ai_disabled = true
               npc.as(L2Attackable).can_return_to_spawn_point = false
               add_move_to_desire(npc, Location.new(obj.x + rand(-100..100), obj.y + rand(-100..100), obj.z + 20, 0), 0)
             end

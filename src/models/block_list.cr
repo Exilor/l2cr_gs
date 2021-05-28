@@ -1,5 +1,6 @@
 struct BlockList
   include Loggable
+  extend Loggable
 
   private OFFLINE_LIST = Concurrent::Map(Int32, Array(Int32)).new
 

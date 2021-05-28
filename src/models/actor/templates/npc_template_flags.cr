@@ -1,0 +1,19 @@
+struct NpcTemplateFlags < AbstractFlags
+  flags(
+    "unique",
+    "attackable",
+    "targetable",
+    "flying",
+    "undying",
+    "can_move",
+    "using_server_side_name",
+    "using_server_side_title",
+    "show_name",
+    "aggressive",
+    "no_sleep_mode",
+    "passable_door",
+    "has_summoner",
+    "can_be_sown",
+    "chaos"
+  )
+end

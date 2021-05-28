@@ -79,17 +79,11 @@ class CharEffectList
 
   def for_each(dances : Bool, & : BuffInfo -> Bool) : Nil
     update = false
-    @buffs.try     &.each { |info| update |= yield info }
-    @triggered.try &.each { |info| update |= yield info }
-    @dances.try    &.each { |info| update |= yield info } if dances
-    @toggles.try   &.each { |info| update |= yield info }
-    @debuffs.try   &.each { |info| update |= yield info }
+    each(dances) { |info| update |= yield info }
     update_effect_list(update)
   end
 
   def effects : Indexable(BuffInfo)
-    return Slice(BuffInfo).empty if empty?
-
     size = 0
     if buffs = @buffs
       size &+= buffs.size
@@ -106,6 +100,8 @@ class CharEffectList
     if toggles = @toggles
       size &+= toggles.size
     end
+
+    return Slice(BuffInfo).empty if size == 0
 
     ret = Array(BuffInfo).new(size)
     ret.concat(buffs)     if buffs

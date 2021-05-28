@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminBBS
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     true
   end
 

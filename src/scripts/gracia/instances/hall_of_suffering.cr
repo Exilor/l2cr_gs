@@ -184,7 +184,7 @@ class Scripts::HallOfSuffering < AbstractInstance
       world.npc_list[mob] = true
     end
 
-    world.npc_list.local_each_value.all?
+    world.npc_list.all? { |_, v| v }
   end
 
   private def get_room_spawns(room)
@@ -213,7 +213,7 @@ class Scripts::HallOfSuffering < AbstractInstance
     end
 
     mob = add_spawn(TUMOR_ALIVE, TUMOR_SPAWNS[world.status], false, 0, false, world.instance_id)
-    mob.disable_core_ai(true)
+    mob.core_ai_disabled = true
     mob.immobilized = true
     mob.current_hp = mob.max_hp * 0.5
     world.npc_list[mob] = false
@@ -444,7 +444,7 @@ class Scripts::HallOfSuffering < AbstractInstance
     elsif npc.id == TEPIOS
       world = InstanceManager.get_player_world(talker)
       if world.as(HOSWorld).reward_item_id == -1
-        warn { "Hall of Suffering: #{talker.name}(#{talker.l2id}) is try to cheat!" }
+        warn { "Hall of Suffering: #{talker}(#{talker.l2id}) is try to cheat!" }
         return get_party_leader_text(talker, world.as(HOSWorld))
       elsif world.as(HOSWorld).rewarded?
         return "32530-11.htm"

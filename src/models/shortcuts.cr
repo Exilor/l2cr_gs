@@ -86,22 +86,38 @@ struct Shortcuts
     error e
   end
 
-  def restore_me
+  def restore_me : Bool
     @shortcuts.clear
 
-    sql = "SELECT charId, slot, page, type, shortcut_id, level FROM character_shortcuts WHERE charId=? AND class_index=?"
-    GameDB.each(sql, @owner.l2id, @owner.class_index) do |rs|
-      slot  = rs.get_i32(:"slot")
-      page  = rs.get_i32(:"page")
-      type  = rs.get_i32(:"type")
-      id    = rs.get_i32(:"shortcut_id")
-      level = rs.get_i32(:"level")
+    begin
+      sql = "SELECT charId, slot, page, type, shortcut_id, level FROM character_shortcuts WHERE charId=? AND class_index=?"
+      GameDB.each(sql, @owner.l2id, @owner.class_index) do |rs|
+        slot  = rs.get_i32(:"slot")
+        page  = rs.get_i32(:"page")
+        type  = rs.get_i32(:"type")
+        id    = rs.get_i32(:"shortcut_id")
+        level = rs.get_i32(:"level")
 
-      shortcut = Shortcut.new(slot, page, ShortcutType[type], id, level, 1)
-      @shortcuts[slot &+ (page &* MAX_SHORTCUTS_PER_BAR)] = shortcut
+        shortcut = Shortcut.new(slot, page, ShortcutType[type], id, level, 1)
+        @shortcuts[slot &+ (page &* MAX_SHORTCUTS_PER_BAR)] = shortcut
+      end
+    rescue e
+      error e
+      return false
     end
-  rescue e
-    error e
+
+    all_shortcuts.each do |sc|
+      if sc.type.item?
+        item = @owner.inventory.get_item_by_l2id(sc.id)
+        if item.nil?
+          delete_shortcut(sc.slot, sc.page)
+        elsif item.etc_item?
+          sc.shared_reuse_group = item.etc_item!.shared_reuse_group
+        end
+      end
+    end
+
+    true
   end
 
   def update_shortcuts(skill_id : Int32, skill_level : Int32)

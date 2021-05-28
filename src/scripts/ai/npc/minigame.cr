@@ -146,7 +146,7 @@ class Scripts::Minigame < AbstractNpcAI
     when SUMIEL
       ROOMS << init_room(npc)
     when TREASURE_BOX
-      npc.disable_core_ai(true)
+      npc.core_ai_disabled = true
       start_quest_timer("afterthat", 180_000, npc, nil)
     end
 

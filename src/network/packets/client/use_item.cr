@@ -219,7 +219,7 @@ class Packets::Incoming::UseItem < GameClientPacket
     pc.send_packet(sm)
   end
 
-  private def send_shared_group_update(pc : L2PcInstance, group, remaining, reuse, item_id)
+  private def send_shared_group_update(pc, group, remaining, reuse, item_id)
     if group > 0
       ex = ExUseSharedGroupItem.new(item_id, group, remaining.to_i32, reuse)
       pc.send_packet(ex)

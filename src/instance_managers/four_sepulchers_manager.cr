@@ -449,7 +449,6 @@ module FourSepulchersManager
         # ID ok
       else
         unless pc.gm?
-          warn { "Player #{pc} (#{pc.l2id}) tried to cheat in four sepulchers." }
           Util.punish(pc, "tried to enter four sepulchers with an invalid npc id (#{npc_id}).")
         end
         return

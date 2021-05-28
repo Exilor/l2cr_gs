@@ -192,7 +192,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         when "STAGE_1_PAUSE"
           world.freya = add_spawn(FREYA_SPELLING, FREYA_SPELLING_SPAWN, false, 0, true, world.instance_id).as(L2GrandBossInstance)
           world.freya.invul = true
-          world.freya.disable_core_ai(true)
+          world.freya.core_ai_disabled = true
           manage_timer(world, 60, NpcString::TIME_REMAINING_UNTIL_NEXT_BATTLE)
           world.status = 2
           start_quest_timer("STAGE_2_START", 60_000, world.controller, nil)
@@ -285,7 +285,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             plr.invul = false
           end
           world.freya.invul = false
-          world.freya.disable_core_ai(false)
+          world.freya.core_ai_disabled = false
           manage_screen_msg(world, NpcString::BEGIN_STAGE_4)
           world.supp_jinia = add_spawn(SUPP_JINIA, SUPP_JINIA_SPAWN, false, 0, true, world.instance_id).as(L2QuestGuardInstance)
           world.supp_jinia.running = true
@@ -316,7 +316,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
 
           KNIGHTS_LOC.each do |loc|
             knight = add_spawn(world.hard_mode? ? KNIGHT_ULTIMATE : KNIGHT, loc, false, 0, false, world.instance_id).as(L2Attackable)
-            knight.disable_core_ai(true)
+            knight.core_ai_disabled = true
             knight.display_effect = 1
             knight.spawn.location = loc
             world.spawned_mobs << knight
@@ -331,7 +331,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             loc = Location.new(MIDDLE_POINT.x + Rnd.rand(-1000..1000), MIDDLE_POINT.y + Rnd.rand(-1000..1000), MIDDLE_POINT.z)
             knight = add_spawn(world.hard_mode? ? KNIGHT_ULTIMATE : KNIGHT, npc.location, false, 0, false, world.instance_id).as(L2Attackable)
             knight.variables["SPAWNED_NPC"] = npc
-            knight.disable_core_ai(true)
+            knight.core_ai_disabled = true
             knight.immobilized = true
             knight.display_effect = 1
             knight.spawn.location = loc
@@ -344,7 +344,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
             loc = Location.new(MIDDLE_POINT.x + Rnd.rand(-1000..1000), MIDDLE_POINT.y + Rnd.rand(-1000..1000), MIDDLE_POINT.z)
             glacier = add_spawn(GLACIER, loc, false, 0, false, world.instance_id).as(L2Attackable)
             glacier.display_effect = 1
-            glacier.disable_core_ai(true)
+            glacier.core_ai_disabled = true
             glacier.immobilized = true
             world.spawned_mobs << glacier
             start_quest_timer("CHANGE_STATE", 1400, glacier, nil)
@@ -352,7 +352,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         when "ICE_RUPTURE"
           if npc.core_ai_disabled?
             return unless npc.is_a?(L2Attackable)
-            npc.disable_core_ai(false)
+            npc.core_ai_disabled = false
             npc.immobilized = false
             npc.display_effect = 2
             manage_random_attack(world, npc)
@@ -573,7 +573,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
         if npc.hp_percent < 20 && !world.support_active?
           world.support_active = true
           world.freya.invul = true
-          world.freya.disable_core_ai(true)
+          world.freya.core_ai_disabled = true
           world.players_inside.each do |plr|
             plr.invul = true
             plr.abort_attack
@@ -668,7 +668,7 @@ class Scripts::IceQueensCastleNormalBattle < AbstractInstance
       when KNIGHT, KNIGHT_ULTIMATE
         if npc.core_ai_disabled?
           manage_random_attack(world, npc.as(L2Attackable))
-          npc.disable_core_ai(false)
+          npc.core_ai_disabled = false
           npc.immobilized = false
           npc.display_effect = 2
           cancel_quest_timer("ICE_RUPTURE", npc, nil)

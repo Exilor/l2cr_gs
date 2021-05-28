@@ -1,7 +1,7 @@
 class EffectHandler::MpPerMax < AbstractEffect
   @power : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @power = params.get_f64("power", 0)
   end
@@ -26,16 +26,16 @@ class EffectHandler::MpPerMax < AbstractEffect
       target.current_mp += amount
     end
 
-    if target.acting_player # custom
-      if info.effector != target
-        sm = SystemMessage.s2_mp_has_been_restored_by_c1
-        sm.add_char_name(info.effector)
-      else
-        sm = SystemMessage.s1_mp_has_been_restored
-      end
+    return unless target.acting_player # custom
 
-      sm.add_int(amount)
-      target.send_packet(sm)
+    if info.effector != target
+      sm = SystemMessage.s2_mp_has_been_restored_by_c1
+      sm.add_char_name(info.effector)
+    else
+      sm = SystemMessage.s1_mp_has_been_restored
     end
+
+    sm.add_int(amount)
+    target.send_packet(sm)
   end
 end

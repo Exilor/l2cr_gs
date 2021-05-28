@@ -8,7 +8,7 @@ module AdminCommandHandler::AdminShowQuests
     "COMPLETED"
   }
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     cmd_params = command.split
     val = Slice.new(4, "")
 
@@ -320,7 +320,7 @@ module AdminCommandHandler::AdminShowQuests
         target.send_packet(QuestList.new)
         target.send_packet(ExShowQuestMark.new(qs.quest.id))
         target.delete_quest_state(qs.quest_name)
-        actor.send_message("Removed quest #{qs.quest.description} from #{target.name}.")
+        actor.send_message("Removed quest #{qs.quest.description} from #{target}.")
       when "CREATE"
         qs = QuestManager.get_quest(val[0].to_i).not_nil!.new_quest_state(target)
         qs.start_quest

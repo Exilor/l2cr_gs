@@ -202,7 +202,7 @@ module TerritoryWarManager
   end
 
   def territories : Array(Territory)
-    TERRITORY_LIST.local_each_value.select(&.owner_clan?).to_a
+    TERRITORY_LIST.select_values { |t| t.owner_clan? }
   end
 
   def get_registered_clans(castle_id : Int32) : Array(L2Clan)?
@@ -1012,7 +1012,7 @@ module TerritoryWarManager
         if temp.nil?
           warn { "Territory ward spawn place #{i} is nil." }
         elsif temp.npc?
-          warn { "Territory ward spawn place #{i} has npc name: #{temp.npc.name}." }
+          warn { "Territory ward spawn place #{i} has npc name: #{temp.npc}." }
         else
           warn { "Territory ward spawn place #{i} is empty." }
         end

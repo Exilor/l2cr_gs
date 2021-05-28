@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminAnnouncements
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc) : Bool
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     cmd = st.empty? ? "" : st.shift
     case cmd

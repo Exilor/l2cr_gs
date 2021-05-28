@@ -3,7 +3,7 @@ class EffectHandler::FoodForPet < AbstractEffect
   @ride : Int32
   @wyvern : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @normal = params.get_i32("normal", 0)

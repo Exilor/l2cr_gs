@@ -9,7 +9,7 @@ module NpcBuffersData
     info { "Loaded #{NPC_BUFFERS.size} buffers data." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "npc") do |d|
         npc_id = parse_int(d, "id")

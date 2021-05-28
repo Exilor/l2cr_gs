@@ -2,7 +2,7 @@ class EffectHandler::ResurrectionSpecial < AbstractEffect
   @res_power : Int32
   @res_recovery : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @res_power = params.get_i32("resPower", 0)
@@ -13,7 +13,7 @@ class EffectHandler::ResurrectionSpecial < AbstractEffect
     EffectType::RESURRECTION_SPECIAL
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::RESURRECTION_SPECIAL.mask
   end
 

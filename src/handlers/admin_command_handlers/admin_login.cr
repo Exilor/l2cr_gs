@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminLogin
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_server_gm_only"
       gm_only
       pc.send_message("Server is now GM only")

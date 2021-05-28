@@ -1,7 +1,7 @@
 class EffectHandler::BlockAction < AbstractEffect
   @blocked_actions = Set(Int32).new
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     params.get_string("blockedActions").split(',') do |action|

@@ -5,7 +5,7 @@ module AdminCommandHandler::AdminPunishment
 
   private DATE_FORMAT = "%Y.%m.%d %H:%M:%S"
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     if st.empty?
       return false

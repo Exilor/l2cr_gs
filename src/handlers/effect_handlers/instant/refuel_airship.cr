@@ -1,7 +1,7 @@
 class EffectHandler::RefuelAirship < AbstractEffect
   @value : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @value = params.get_i32("value", 0)
   end

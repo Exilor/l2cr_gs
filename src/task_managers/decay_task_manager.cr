@@ -16,9 +16,8 @@ module DecayTaskManager
   end
 
   def add(char : L2Character, delay)
-    task = DecayTask.new(char)
-    TASKS[char]?.try &.cancel
-    TASKS[char] = POOL.schedule_delayed(task, delay.to_f64 * 1000)
+    task = POOL.schedule_delayed(DecayTask.new(char), delay.to_f64 * 1000)
+    TASKS.put(char, task) { nil }.try &.cancel
   end
 
   def cancel(char : L2Character)

@@ -1,7 +1,7 @@
 class L2TerritoryWardInstance < L2Attackable
   def initialize(template : L2NpcTemplate)
     super
-    disable_core_ai(true)
+    self.core_ai_disabled = true
   end
 
   def auto_attackable?(attacker : L2Character) : Bool

@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminPolymorph
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_transform_menu"
       AdminHtml.show_admin_html(pc, "transform.htm")
       return true

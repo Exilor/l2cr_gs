@@ -14,7 +14,7 @@ module ClassListData
     info { "Loaded #{CLASS_DATA.size} class data in #{timer} s." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "class") do |d|
         class_id = ClassId[parse_int(d, "classId")]

@@ -10,6 +10,6 @@ class Packets::Incoming::MoveWithDelta < GameClientPacket
   end
 
   private def run_impl
-    warn "Not implemented (not by L2J either)."
+    # Not implemented (not by L2J either)
   end
 end

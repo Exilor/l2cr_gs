@@ -89,6 +89,7 @@ require "./data/xml/option_data"
 require "./data/xml/skill_learn_data"
 require "./data/xml/npc_data"
 require "./data/xml/door_data"
+require "./data/xml/colosseum_fence_data"
 require "./data/xml/static_object_data"
 require "./data/xml/siege_schedule_data"
 require "./data/xml/fish_data"
@@ -197,6 +198,7 @@ module GameServer
     WalkingManager.load
     StaticObjectData.load
     DoorData.load
+    ColosseumFenceData.load
     ZoneManager.load
     CastleManager.load_instances
     NpcBufferTable.load

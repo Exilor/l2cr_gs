@@ -44,7 +44,7 @@ class EffectHandler::RebalanceHP < AbstractEffect
       return
     end
 
-    party.each_with_summon do |m|
+    each_with_summon(party) do |m|
       if m.alive? && Util.in_range?(skill.affect_range, effector, m, true)
         full_hp += m.max_hp
         current_hps += m.current_hp
@@ -53,7 +53,7 @@ class EffectHandler::RebalanceHP < AbstractEffect
 
     percent_hp = current_hps / full_hp
 
-    party.each_with_summon do |m|
+    each_with_summon(party) do |m|
       if m.alive? && Util.in_range?(skill.affect_range, effector, m, true)
         new_hp = m.max_hp * percent_hp
         if new_hp > m.current_hp
@@ -65,6 +65,16 @@ class EffectHandler::RebalanceHP < AbstractEffect
         end
 
         m.current_hp = new_hp.to_f64
+      end
+    end
+  end
+
+  private def each_with_summon(party)
+    party.each do |m|
+      yield m
+
+      if s = m.summon
+        yield s
       end
     end
   end

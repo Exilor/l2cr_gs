@@ -3,7 +3,7 @@ class EffectHandler::NoblesseBless < AbstractEffect
     info.effected.playable?
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::NOBLESS_BLESSING.mask
   end
 

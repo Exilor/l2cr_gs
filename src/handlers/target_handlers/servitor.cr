@@ -2,7 +2,7 @@ module TargetHandler::Servitor
   extend self
   extend TargetHandler
 
-  def get_target_list(skill, char, only_first, target) : Array(L2Object)
+  def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     if servitor = char.summon.as?(L2ServitorInstance)
       return [servitor] of L2Object
     end

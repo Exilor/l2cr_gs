@@ -259,7 +259,7 @@ class Calendar
     io.print("Calendar(", @time, ')')
   end
 
-  def inspect(io)
+  def inspect(io : IO)
     to_s(io)
   end
 end

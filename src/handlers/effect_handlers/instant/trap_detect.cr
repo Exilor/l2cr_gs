@@ -1,7 +1,7 @@
 class EffectHandler::TrapDetect < AbstractEffect
   @power : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     if params.empty?

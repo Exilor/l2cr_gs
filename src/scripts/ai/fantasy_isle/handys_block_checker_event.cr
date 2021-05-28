@@ -55,6 +55,6 @@ class Scripts::HandysBlockCheckerEvent < Quest
   end
 
   private def event_full?(arena)
-    HandysBlockCheckerManager.get_holder(arena).all_players.size == 12
+    HandysBlockCheckerManager.get_holder(arena).size == 12
   end
 end

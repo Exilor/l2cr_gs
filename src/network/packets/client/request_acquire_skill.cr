@@ -22,18 +22,14 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
   private def run_impl
     return unless pc = active_char
 
-    unless @level.between?(1, 1000) && @id.between?(1, 32000)
-      warn { "Wrong level and id #{@level} #{@id}" }
-      Util.punish(pc, "wrong packet data in RequestAcquireSkill.")
+    unless @level.between?(1, 1000) && @id.between?(1, 32_000)
+      Util.punish(pc, "wrong level (#{@level}) and id (#{@id}) in RequestAcquireSkill.")
       return
     end
 
     trainer = pc.last_folk_npc
 
-    unless trainer.is_a?(L2NpcInstance)
-      debug { "#{trainer}:#{trainer.class} is not a L2NpcInstance." }
-      return
-    end
+    return unless trainer.is_a?(L2NpcInstance)
 
     if !trainer.can_interact?(pc) && !pc.gm?
       return
@@ -54,7 +50,7 @@ class Packets::Incoming::RequestAcquireSkill < GameClientPacket
       return
     end
 
-    debug { "Requested to learn #{@skill_type} #{skill}." }
+    debug { "#{pc} requested to learn #{@skill_type} #{skill}." }
 
     case @skill_type
     when AcquireSkillType::CLASS

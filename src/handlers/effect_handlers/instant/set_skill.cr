@@ -2,7 +2,7 @@ class EffectHandler::SetSkill < AbstractEffect
   @skill_id : Int32
   @skill_lvl : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @skill_id = params.get_i32("skillId", 0)

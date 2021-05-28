@@ -55,7 +55,6 @@ class Packets::Incoming::RequestPreviewItem < GameClientPacket
 
     unless buy_list = BuyListData.get_buy_list(@list_id)
       Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}.")
-      warn { "Buy list with id #{@list_id} not found." }
       return
     end
 

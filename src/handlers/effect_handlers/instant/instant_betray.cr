@@ -2,7 +2,7 @@ class EffectHandler::InstantBetray < AbstractEffect
   @chance : Float64
   @time : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @chance = params.get_f64("chance", 0)
@@ -13,7 +13,7 @@ class EffectHandler::InstantBetray < AbstractEffect
     true
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::BETRAYED.mask
   end
 

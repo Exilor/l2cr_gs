@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminManor
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     msg = NpcHtmlMessage.new
     msg.set_file(pc, "data/html/admin/manor.htm")
     msg["%status%"] = CastleManorManager.current_mode_name

@@ -187,7 +187,7 @@ class L2Clan
     sm.add_string(member.name)
     broadcast_to_online_members(sm)
 
-    info { "Clan leader changed from #{ex_member.name} to #{member.name}." }
+    info { "Clan leader changed from #{ex_member} to #{member}." }
   end
 
   def leader_name : String

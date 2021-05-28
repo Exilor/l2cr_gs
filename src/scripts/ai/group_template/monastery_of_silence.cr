@@ -185,7 +185,7 @@ class Scripts::MonasteryOfSilence < AbstractNpcAI
 
   def on_spawn(npc)
     npc.invul = true
-    npc.disable_core_ai(true)
+    npc.core_ai_disabled = true
     start_quest_timer("TRAINING", 30_000, npc, nil, true)
 
     super

@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminExpSp
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?("admin_add_exp_sp")
       begin
         val = command.from(16)

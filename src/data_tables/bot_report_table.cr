@@ -318,5 +318,9 @@ module BotReportTable
     end
   end
 
+  private def parse_document(doc : XML::Node, file : File)
+    # no-op
+  end
+
   private record PunishHolder, punish : Skill, system_message_id : Int32
 end

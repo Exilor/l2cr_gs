@@ -5,7 +5,7 @@ module AdminCommandHandler::AdminRide
   private PURPLE_MANED_HORSE_TRANSFORMATION_ID = 106
   private JET_BIKE_TRANSFORMATION_ID = 20001
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     unless player = get_ride_target(pc)
       return false
     end

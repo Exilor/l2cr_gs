@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminClan
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     cmd = st.shift
     case cmd

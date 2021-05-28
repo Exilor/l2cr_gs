@@ -28,7 +28,7 @@ module EnchantSkillGroupsData
     info { "Loaded #{ENCHANT_SKILL_GROUPS.size} groups and #{routes} routes in #{timer} s." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "group") do |d|
         id = parse_int(d, "id")
@@ -90,7 +90,7 @@ module EnchantSkillGroupsData
     Int32::MAX
   end
 
-  def get_enchant_skill_rate(pc : L2PcInstance, skill : Skill)
+  def get_enchant_skill_rate(pc : L2PcInstance, skill : Skill) : Int32
     if esl = ENCHANT_SKILL_TREES[skill.id]?
       if esh = esl.get_enchant_skill_holder(skill.level)
         return esh.get_rate(pc)

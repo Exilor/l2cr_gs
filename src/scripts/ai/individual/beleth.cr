@@ -334,14 +334,16 @@ class Scripts::Beleth < AbstractNpcAI
 
       DoorData.get_door(DOOR3).not_nil!.open_me
 
-      @camera1.not_nil!.delete_me
-      @camera2.not_nil!.delete_me
-      @whirpool.not_nil!.delete_me
-
-      @zone.each_character_inside do |c|
-        c.enable_all_skills
-        c.invul = false
-        c.immobilized = false
+      begin
+        @camera1.not_nil!.delete_me
+        @camera2.not_nil!.delete_me
+        @whirpool.not_nil!.delete_me
+      ensure
+        @zone.each_character_inside do |c|
+          c.enable_all_skills
+          c.invul = false
+          c.immobilized = false
+        end
       end
     when "CHECK_ATTACK"
       if @last_attack &+ 900_000 < Time.ms

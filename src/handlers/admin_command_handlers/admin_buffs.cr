@@ -6,7 +6,7 @@ module AdminCommandHandler::AdminBuffs
   private FONT_RED1 = "<font color=\"FF0000\">"
   private FONT_RED2 = "</font>"
 
-  def use_admin_command(command, pc) : Bool
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?("admin_getbuffs")
       st = command.split
       command = st.shift
@@ -102,7 +102,7 @@ module AdminCommandHandler::AdminBuffs
       if creature.is_a?(L2PcInstance)
         creature.send_packet(SkillCoolTime.new(creature))
       end
-      pc.send_message("Skill reuse was removed from #{creature.name}.")
+      pc.send_message("Skill reuse was removed from #{creature}.")
       return true
     elsif command.starts_with?("admin_switch_gm_buffs")
       if Config.gm_give_special_skills != Config.gm_give_special_aura_skills
@@ -257,7 +257,7 @@ module AdminCommandHandler::AdminBuffs
     pc.send_packet(NpcHtmlMessage.new(html.to_s))
 
     if Config.gmaudit
-      GMAudit.log(pc, "getbuffs", "#{target.name} (#{target.l2id})", "")
+      GMAudit.log(pc, "getbuffs", "#{target} (#{target.l2id})", "")
     end
   end
 
@@ -269,12 +269,12 @@ module AdminCommandHandler::AdminBuffs
     if target && skill_id > 0
       if target.affected_by_skill?(skill_id)
         target.stop_skill_effects(true, skill_id)
-        pc.send_message("Removed skill ID: #{skill_id} effects from #{target.name} (#{l2id}).")
+        pc.send_message("Removed skill ID: #{skill_id} effects from #{target} (#{l2id}).")
       end
 
       show_buffs(pc, target, 1, false)
       if Config.gmaudit
-        GMAudit.log(pc, "stopbuff", "#{target.name} (#{l2id})", skill_id.to_s)
+        GMAudit.log(pc, "stopbuff", "#{target} (#{l2id})", skill_id.to_s)
       end
     end
   end
@@ -282,10 +282,10 @@ module AdminCommandHandler::AdminBuffs
   private def remove_all_buffs(pc, l2id)
     if target = L2World.find_object(l2id).as?(L2Character)
       target.stop_all_effects
-      pc.send_message("Removed all effects from #{target.name} (#{l2id})")
+      pc.send_message("Removed all effects from #{target} (#{l2id})")
       show_buffs(pc, target, 1, false)
       if Config.gmaudit
-        GMAudit.log(pc, "stopallbuffs", "#{target.name} (#{l2id})", "")
+        GMAudit.log(pc, "stopallbuffs", "#{target} (#{l2id})", "")
       end
     end
   end

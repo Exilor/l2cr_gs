@@ -4,7 +4,7 @@ module TargetHandler::Unlockable
 
   TARGET_TYPE = TargetType::UNLOCKABLE
 
-  def get_target_list(skill, char, only_first, target) : Array(L2Object)
+  def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     if target.is_a?(L2DoorInstance) || target.is_a?(L2ChestInstance)
       return [target] of L2Object
     end

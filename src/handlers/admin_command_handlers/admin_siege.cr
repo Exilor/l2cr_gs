@@ -26,7 +26,7 @@ module AdminCommandHandler::AdminSiege
     "admin_clanhallteleportself"
   }
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     command = st.shift
 

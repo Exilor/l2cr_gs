@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminGm
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_gm" && pc.gm?
       AdminData.delete_gm(pc)
       pc.access_level = 0

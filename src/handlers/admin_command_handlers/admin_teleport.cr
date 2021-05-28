@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminTeleport
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     case command
     when "admin_teleto"
       pc.tele_mode = 1
@@ -234,7 +234,7 @@ module AdminCommandHandler::AdminTeleport
     else
       pc.intention = AI::IDLE
       pc.tele_to_location(target, true)
-      pc.send_message("You have teleported to character #{target.name}.")
+      pc.send_message("You have teleported to character #{target}.")
     end
   end
 

@@ -145,7 +145,7 @@ class BlockCheckerEngine
   # * Will send all packets for the event members with the relation info
   # * @param plr
   def broadcast_relation_changed(pc : L2PcInstance)
-    @holder.not_nil!.all_players.each do |p|
+    @holder.not_nil!.each_player do |p|
       rc = RelationChanged.new(pc, pc.get_relation(p), pc.auto_attackable?(p))
       p.send_packet(rc)
     end
@@ -188,7 +188,7 @@ class BlockCheckerEngine
       @engine.blue_points = @engine.spawns.size // 2
       initial_points = ExCubeGameChangePoints.new(300, @engine.blue_points, @engine.red_points)
 
-      @engine.holder.not_nil!.all_players.each do |pc|
+      @engine.holder.not_nil!.each_player do |pc|
         # Send the secret client packet set up
         red = @engine.holder.not_nil!.red_players.includes?(pc)
 
@@ -301,7 +301,7 @@ class BlockCheckerEngine
             block.red = false
           end
 
-          block.disable_core_ai(true)
+          block.core_ai_disabled = true
           @engine.spawns << sp
           random &+= 1
         end
@@ -456,7 +456,7 @@ class BlockCheckerEngine
   private def set_players_back
     _end = ExCubeGameEnd.new(@red_winner)
 
-    @holder.not_nil!.all_players.each do |pc|
+    @holder.not_nil!.each_player do |pc|
       pc.stop_all_effects
       # Remove team aura
       pc.team = Team::NONE

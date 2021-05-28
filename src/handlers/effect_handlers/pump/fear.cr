@@ -6,7 +6,7 @@ class EffectHandler::Fear < AbstractEffect
       e.is_a?(L2SiegeFlagInstance) || e.template.race.siege_weapon?))
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::FEAR.mask
   end
 

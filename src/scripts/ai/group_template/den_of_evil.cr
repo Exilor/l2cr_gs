@@ -71,7 +71,7 @@ class Scripts::DenOfEvil < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc.disable_core_ai(true)
+    npc.core_ai_disabled = true
     npc.immobilized = true
 
     unless zone = ZoneManager.get_zone(npc, L2EffectZone)

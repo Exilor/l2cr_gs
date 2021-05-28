@@ -263,10 +263,7 @@ class PcInventory < Inventory
   end
 
   def destroy_item(process : String?, l2id : Int32, count : Int64, actor : L2PcInstance?, reference) : L2ItemInstance?
-    unless item = get_item_by_l2id(l2id)
-      return
-    end
-
+    return unless item = get_item_by_l2id(l2id)
     destroy_item(process, item, count, actor, reference)
   end
 

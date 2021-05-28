@@ -578,7 +578,7 @@ class Scripts::TowerOfNaia < AbstractNpcAI
       heading = Util.calculate_heading_from(npc.x, npc.y, coords[0], coords[1])
       time = ((distance / npc.walk_speed) * 1000).to_i
       npc.running = false
-      npc.disable_core_ai(true)
+      npc.core_ai_disabled = true
       npc.no_random_walk = true
       npc.set_intention(AI::MOVE_TO, Location.new(*coords, heading))
       npc.spawn.x = coords[0]

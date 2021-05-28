@@ -40,7 +40,7 @@ class Scripts::TurekOrcs < AbstractNpcAI
           if Rnd.rand(100) < 10
             # Say and flee
             broadcast_npc_say(npc, 0, NpcString.get(Rnd.rand(1000007..1000027)))
-            npc.disable_core_ai(true) # to avoid attacking behaviour while fleeing
+            npc.core_ai_disabled = true # to avoid attacking behaviour while fleeing
             npc.running = true
             npc.set_intention(AI::MOVE_TO, Location.new(npc.get_ai_value("fleeX"), npc.get_ai_value("fleeY"), npc.get_ai_value("fleeZ")))
             npc.variables["state"] = 1
@@ -72,7 +72,7 @@ class Scripts::TurekOrcs < AbstractNpcAI
     # NPC reaches flee point
     if npc.variables.get_i32("state") == 1
       if npc.x == npc.get_ai_value("fleeX") && npc.y == npc.get_ai_value("fleeY")
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
         start_quest_timer("checkState", 15_000, npc, nil)
         npc.variables["state"] = 2
         npc.broadcast_event("WARNING", 400, L2World.get_player(npc.variables.get_i32("attacker")))
@@ -80,7 +80,7 @@ class Scripts::TurekOrcs < AbstractNpcAI
         npc.set_intention(AI::MOVE_TO, Location.new(npc.get_ai_value("fleeX"), npc.get_ai_value("fleeY"), npc.get_ai_value("fleeZ")))
       end
     elsif npc.variables.get_i32("state") == 3 && npc.stays_in_spawn_loc?
-      npc.disable_core_ai(false)
+      npc.core_ai_disabled = false
       npc.variables.delete("state")
     end
   end

@@ -122,14 +122,8 @@ module GeoData
   end
 
   def can_see_target?(char : L2Object, target : L2Object?) : Bool
-    unless target
-      return false
-    end
-
-    if target.door?
-      return true
-    end
-
+    return false unless target
+    return true if target.door?
     can_see_target?(*char.xyz, char.instance_id, *target.xyz, target.instance_id)
   end
 
@@ -143,8 +137,15 @@ module GeoData
   end
 
   def can_see_target?(x : Int32, y : Int32, z : Int32, instance_id : Int32, tx : Int32, ty : Int32, tz : Int32) : Bool
-    !DoorData.check_if_doors_between(x, y, z, tx, ty, tz, instance_id, true) &&
-      can_see_target?(x, y, z, tx, ty, tz)
+    if DoorData.check_if_doors_between(x, y, z, tx, ty, tz, instance_id, true)
+      return false
+    end
+
+    if ColosseumFenceData.check_if_fences_between(x, y, z, tx, ty, tz, instance_id)
+      return false
+    end
+
+    can_see_target?(x, y, z, tx, ty, tz)
   end
 
   def can_see_target?(x : Int32, y : Int32, z : Int32, tx : Int32, ty : Int32, tz : Int32) : Bool
@@ -257,6 +258,10 @@ module GeoData
       return false
     end
 
+    if ColosseumFenceData.check_if_fences_between(from_x, from_y, from_z, to_x, to_y, to_z, instance_id)
+      return false
+    end
+
     iter = LinePointIterator.new(geo_x, geo_y, t_geo_x, t_geo_y)
     iter.next
     prev_x = iter.x
@@ -317,6 +322,10 @@ module GeoData
     tz = get_nearest_z(t_geo_x, t_geo_y, tz)
 
     if DoorData.check_if_doors_between(x, y, z, tx, ty, tz, instance_id, false)
+      return Location.new(x, y, get_height(x, y, z))
+    end
+
+    if ColosseumFenceData.check_if_fences_between(x, y, z, tx, ty, tz, instance_id)
       return Location.new(x, y, get_height(x, y, z))
     end
 

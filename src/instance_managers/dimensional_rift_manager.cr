@@ -56,7 +56,7 @@ module DimensionalRiftManager
     parse_datapack_file("dimensionalRift.xml")
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     count_good = count_bad = 0
 
     find_element(doc, "rift") do |rift|
@@ -265,14 +265,14 @@ module DimensionalRiftManager
   def handle_cheat(pc : L2PcInstance, npc : L2Npc)
     show_html_file(pc, "data/html/seven_signs/rift/Cheater.htm", npc)
     unless pc.gm?
-      warn { "Player #{pc} (#{pc.l2id}) was cheating in dimensional rift area." }
       Util.punish(pc, "tried to cheat in dimensional rift.")
     end
   end
 
   def allowed_enter?(type : Int8)
     room = ROOMS[type]
-    count = room.each_value.count &.party_inside?
+    count = 0
+    room.each_value { |r| count &+= 1 if r.party_inside? }
     count < room.size &- 1
   end
 

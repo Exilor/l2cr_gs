@@ -1,3 +1,3 @@
 module ItemType
-  abstract def mask : UInt32
+  # abstract def mask : UInt32
 end

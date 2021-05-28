@@ -9,7 +9,6 @@ class L2EtcItem < L2Item
   getter item_type : EtcItemType
   getter handler_name : String?
   getter extractable_items = Slice(L2ExtractableProduct).empty
-  getter? blessed : Bool
 
   def initialize(set : StatsSet)
     super
@@ -31,7 +30,7 @@ class L2EtcItem < L2Item
     end
 
     @handler_name = set.get_string("handler", nil)
-    @blessed = set.get_bool("blessed", false)
+    @item_flags.blessed = set.get_bool("blessed", false)
 
     if capsuled_items = set.get_string("capsuled_items", nil)
       extractable_items = nil
@@ -71,5 +70,9 @@ class L2EtcItem < L2Item
 
   def mask : UInt32
     0u32 # EtcItemType#mask is always 0
+  end
+
+  def blessed? : Bool
+    @item_flags.blessed?
   end
 end

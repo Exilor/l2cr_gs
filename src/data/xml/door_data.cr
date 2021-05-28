@@ -17,7 +17,7 @@ module DoorData
     info { "Loaded #{DOORS.size} door templates for #{REGIONS.size} regions." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |a|
       find_element(a, "door") do |b|
         set = get_attributes(b)

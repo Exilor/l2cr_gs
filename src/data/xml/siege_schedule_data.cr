@@ -19,7 +19,7 @@ module SiegeScheduleData
     DATES
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "schedule") do |cd|
         set = StatsSet.new

@@ -1,4 +1,4 @@
-class EffecyHandler::Sweeper < AbstractEffect
+class EffectHandler::Sweeper < AbstractEffect
   def instant? : Bool
     true
   end

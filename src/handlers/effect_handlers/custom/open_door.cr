@@ -2,7 +2,7 @@ class EffectHandler::OpenDoor < AbstractEffect
   @chance : Int32
   @is_item : Bool
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @chance = params.get_i32("chance", 0)

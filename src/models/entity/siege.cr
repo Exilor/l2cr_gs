@@ -18,13 +18,13 @@ class Siege
   @siege_end_date = Calendar.new
   @scheduled_start_siege_task : TaskScheduler::DelayedTask?
   @first_owner_clan_id = -1
-  @attacker_clans = Array(L2SiegeClan).new
-  @defender_clans = Array(L2SiegeClan).new
+  @attacker_clans = [] of L2SiegeClan
+  @defender_clans = [] of L2SiegeClan
 
   getter control_tower_count = 0
   getter siege_guard_manager
-  getter defender_waiting_clans = Array(L2SiegeClan).new
-  getter! castle
+  getter defender_waiting_clans = [] of L2SiegeClan
+  getter castle
   getter? in_progress = false
   getter? registration_over = false
 

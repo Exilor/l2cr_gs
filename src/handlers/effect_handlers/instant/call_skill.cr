@@ -1,5 +1,5 @@
 class EffectHandler::CallSkill < AbstractEffect
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     id = params.get_i32("skillId")

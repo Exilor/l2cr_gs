@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminPForge
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_forge"
       show_main_page(pc)
     elsif command.starts_with?("admin_forge_values ")

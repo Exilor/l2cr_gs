@@ -91,7 +91,6 @@ class Scripts::Baium < AbstractNpcAI
         notify_event("CLEAR_STATUS", nil, nil)
       end
     end
-
   end
 
   def on_adv_event(event, npc, player)
@@ -119,7 +118,7 @@ class Scripts::Baium < AbstractNpcAI
         npc.not_nil!.delete_me
         set_status(IN_FIGHT)
         @baium = add_spawn(BAIUM, BAIUM_LOC, false, 0).as(L2GrandBossInstance)
-        @baium.not_nil!.disable_core_ai(true)
+        @baium.not_nil!.core_ai_disabled = true
         add_boss(@baium)
         @last_attack = Time.ms
         start_quest_timer("WAKEUP_ACTION", 50, @baium, nil)
@@ -174,7 +173,7 @@ class Scripts::Baium < AbstractNpcAI
       end
       start_quest_timer("SPAWN_ARCHANGEL", 8000, npc, player)
     when "SPAWN_ARCHANGEL"
-      @baium.not_nil!.disable_core_ai(false)
+      @baium.not_nil!.core_ai_disabled = false
 
       ARCHANGEL_LOC.each do |l|
         archangel = add_spawn(ARCHANGEL, l, false, 0, true)
@@ -251,8 +250,8 @@ class Scripts::Baium < AbstractNpcAI
       @zone.each_character_inside do |char|
         if char.npc?
           char.delete_me
-        elsif char.player?
-          notify_event("teleportOut", nil, char.as(L2PcInstance))
+        elsif char.is_a?(L2PcInstance)
+          notify_event("teleportOut", nil, char)
         end
       end
     when "RESPAWN_BAIUM"

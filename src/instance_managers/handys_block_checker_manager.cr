@@ -26,7 +26,7 @@ module HandysBlockCheckerManager
       new_votes = ARENA_VOTES[arena] &+ 1
       holder = ARENA_PLAYERS[arena]
 
-      if new_votes > holder.all_players.size / 2 && !holder.event.started?
+      if new_votes > holder.size / 2 && !holder.event.started?
         clear_arena_votes(arena)
         if holder.blue_team_size == 0 || holder.red_team_size == 0
           return
@@ -64,7 +64,7 @@ module HandysBlockCheckerManager
 
     holder.sync do
       4.times do |i|
-        if ARENA_PLAYERS[i].all_players.includes?(pc)
+        if ARENA_PLAYERS[i].includes?(pc)
           sm = SystemMessage.c1_is_already_registered_on_the_match_waiting_list
           sm.add_pc_name(pc)
           pc.send_packet(sm)

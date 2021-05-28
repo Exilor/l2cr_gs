@@ -1,7 +1,7 @@
 class EffectHandler::VitalityPointUp < AbstractEffect
   @value : Float32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @value = params.get_f32("value", 0)
   end

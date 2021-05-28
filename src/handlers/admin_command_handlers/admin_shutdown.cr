@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminShutdown
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?("admin_server_shutdown")
       begin
         val = command.from(22)

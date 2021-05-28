@@ -27,7 +27,7 @@ class ItemAuctionInstance
   getter current_auction : ItemAuction?
   getter next_auction : ItemAuction?
 
-  def initialize(instance_id : Int32, auction_ids : Atomic(Int32), node)
+  def initialize(instance_id : Int32, auction_ids : Atomic(Int32), node : XML::Node)
     @instance_id = instance_id
     @auction_ids = auction_ids
     generator_config = get_attributes(node)
@@ -94,6 +94,10 @@ class ItemAuctionInstance
 
     info { "Loaded #{@items.size} item(s) and registered #{@auctions.size} auction(s) for npc with id #{@instance_id}." }
     check_and_set_current_and_next_auction
+  end
+
+  private def parse_document(node : XML::Node, file : File)
+    # no-op
   end
 
   def shutdown

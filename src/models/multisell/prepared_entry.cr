@@ -3,9 +3,9 @@ require "./entry"
 class Multisell::PreparedEntry < Multisell::Entry
   @stackable = true
 
-  getter tax_amount = 0i64
+  getter tax_amount
 
-  def initialize(template, item, apply_taxes, maintain_enchantment, tax_rate)
+  def initialize(template : Entry, item : L2ItemInstance?, apply_taxes : Bool, maintain_enchantment : Bool, tax_rate : Float64)
     @tax_amount = 0i64
     @entry_id = template.entry_id * 100_000
 

@@ -81,7 +81,7 @@ class Packets::Incoming::RequestExAskJoinMPCC < GameClientPacket
       sm.add_string(requestor.name)
       target_leader.send_packet(sm)
       target_leader.send_packet(ExAskJoinMPCC.new(requestor.name))
-      msg = "You invited #{target_leader.name} to your Command Channel."
+      msg = "You invited #{target_leader} to your Command Channel."
       requestor.send_message(msg)
     end
   end

@@ -1,9 +1,6 @@
 module ItemHandler
   include Packets::Outgoing
-
-  macro extended
-    include Loggable
-  end
+  include Loggable
 
   private HANDLERS = {} of String => self
 

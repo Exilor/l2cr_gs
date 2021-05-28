@@ -4,7 +4,7 @@ module AdminCommandHandler::AdminScan
 
   private DEFAULT_RADIUS = 500
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     actual_command = st.shift
 

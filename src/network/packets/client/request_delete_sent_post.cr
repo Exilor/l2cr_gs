@@ -1,7 +1,7 @@
 class Packets::Incoming::RequestDeleteSentPost < GameClientPacket
   no_action_request
 
-  @msg_ids : Slice(Int32)?
+  @msg_ids = Slice(Int32).empty
 
   BATCH_LENGTH = 4
 
@@ -25,9 +25,9 @@ class Packets::Incoming::RequestDeleteSentPost < GameClientPacket
       return
     end
 
-    return unless msg_ids = @msg_ids
+    return if @msg_ids.empty?
 
-    msg_ids.each do |msg_id|
+    @msg_ids.each do |msg_id|
       unless msg = MailManager.get_message(msg_id)
         warn { "Message with id #{msg_id} not found." }
         next
@@ -45,6 +45,6 @@ class Packets::Incoming::RequestDeleteSentPost < GameClientPacket
       msg.set_deleted_by_sender
     end
 
-    pc.send_packet(ExChangePostState.new(false, msg_ids, Message::DELETED))
+    pc.send_packet(ExChangePostState.new(false, @msg_ids, Message::DELETED))
   end
 end

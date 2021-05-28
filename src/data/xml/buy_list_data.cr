@@ -45,7 +45,7 @@ module BuyListData
     error e
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     buy_list_id = File.basename(file.path, ".xml")
     return unless buy_list_id.number?
     buy_list_id = buy_list_id.to_i

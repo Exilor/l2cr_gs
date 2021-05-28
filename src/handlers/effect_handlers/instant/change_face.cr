@@ -1,7 +1,7 @@
 class EffectHandler::ChangeFace < AbstractEffect
   @value : Int8
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @value = params.get_i8("value", 0)
   end

@@ -27,7 +27,6 @@ class Packets::Incoming::RequestRejectPostAttachment < GameClientPacket
 
     if msg.receiver_id != pc.l2id
       Util.punish(pc, "tried to reject a mail attachment owned by another player.")
-      warn { pc.name + " tried to reject a message meant to another player." }
       return
     end
 

@@ -458,11 +458,7 @@ abstract class L2Object < ListenersContainer
   end
 
   def to_s(io : IO)
-    if name.empty?
-      io.print({{@type.stringify + "("}}, @l2id, ')')
-    else
-      io << name
-    end
+    io << name
   end
 
   def inspect(io : IO)

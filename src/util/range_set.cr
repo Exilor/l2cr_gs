@@ -11,6 +11,12 @@ class RangeSet(T)
     @first = nil
   end
 
+  def size : Int32
+    size = 0
+    each_range { |r| size += r.max - r.min.succ }
+    size
+  end
+
   def includes?(val : T) : Bool
     each_range do |r|
       if r.min <= val <= r.max

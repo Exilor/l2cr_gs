@@ -4,7 +4,7 @@ module AdminCommandHandler::AdminEvents
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     unless pc
       return false
     end

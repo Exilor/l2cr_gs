@@ -23,7 +23,7 @@ class TarBeetleSpawn
     end
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |d|
       find_element(d, "spawnZone") do |r|
         npc_count = parse_int(r, "maxNpcCount")
@@ -115,7 +115,7 @@ class TarBeetleSpawn
           npc.no_random_walk = true
           npc.immobilized = true
           npc.invul = true
-          npc.disable_core_ai(true)
+          npc.core_ai_disabled = true
           npc.script_value = 5
           npc.variables["zoneIndex"] = @index
           @spawn << npc

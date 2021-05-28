@@ -4,7 +4,7 @@ class EffectHandler::Summon < AbstractEffect
   @consume_item_interval : Int32
   @life_time : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     if params.empty?

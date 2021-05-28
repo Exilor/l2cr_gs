@@ -1,7 +1,7 @@
 class EffectHandler::DispelBySlot < AbstractEffect
   @dispel_abnormals = Slice({AbnormalType, Int16}).empty
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     dispel = params.get_string("dispel", nil)

@@ -3,7 +3,7 @@ module AdminCommandHandler::AdminEffects
   extend AdminCommandHandler
   include Packets::Outgoing
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     st.shift?
 
@@ -36,7 +36,7 @@ module AdminCommandHandler::AdminEffects
       end
 
       target.invisible = !target.invisible?
-      pc.send_message("You\"ve made #{target.name} #{target.invisible? ? "invisible" : "visible"}.")
+      pc.send_message("You\"ve made #{target} #{target.invisible? ? "invisible" : "visible"}.")
       if target.is_a?(L2PcInstance)
         target.broadcast_user_info
       end

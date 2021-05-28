@@ -2,7 +2,7 @@ module TargetHandler::Ground
   extend self
   extend TargetHandler
 
-  def get_target_list(skill, char, only_first, target) : Array(L2Object)
+  def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     target_list = [] of L2Object
     max_targets = skill.affect_limit
     src_in_arena = char.inside_pvp_zone? && !char.inside_siege_zone?

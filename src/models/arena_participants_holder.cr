@@ -13,24 +13,25 @@ struct ArenaParticipantsHolder
     @event = BlockCheckerEngine.new(self, arena)
   end
 
-  def all_players : Array(L2PcInstance)
-    @red_players + @blue_players
+  def each_player(& : L2PcInstance ->)
+    @red_players.each { |pc| yield pc }
+    @blue_players.each { |pc| yield pc }
+  end
+
+  def size : Int32
+    red_team_size + blue_team_size
+  end
+
+  def includes?(pc : L2PcInstance) : Bool
+    @red_players.includes?(pc) || @blue_players.includes?(pc)
   end
 
   def add_player(pc : L2PcInstance, team : Int32)
-    if team == 0
-      @red_players << pc
-    else
-      @blue_players << pc
-    end
+    (team == 0 ? @red_players : @blue_players) << pc
   end
 
   def remove_player(pc : L2PcInstance, team : Int32)
-    if team == 0
-      @red_players.delete_first(pc)
-    else
-      @blue_players.delete_first(pc)
-    end
+    (team == 0 ? @red_players : @blue_players).delete_first(pc)
   end
 
   def get_player_team(pc : L2PcInstance) : Int32
@@ -46,8 +47,7 @@ struct ArenaParticipantsHolder
   end
 
   def broadcast_packet_to_team(gsp : GameServerPacket | SystemMessageId)
-    @red_players.each { |pc| pc.send_packet(gsp) }
-    @blue_players.each { |pc| pc.send_packet(gsp) }
+    each_player { |pc| pc.send_packet(gsp) }
   end
 
   def clear_players

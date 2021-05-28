@@ -4,7 +4,7 @@ module AdminCommandHandler::AdminReload
 
   private RELOAD_USAGE = "Usage: #reload <config|access|npc|quest [quest_id|quest_name]|walker|htm[l] [file|directory]|multisell|buylist|teleport|skill|item|door|effect|handler|enchant|creationpoint>"
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     actual_command = st.shift
     if actual_command.casecmp?("admin_reload")

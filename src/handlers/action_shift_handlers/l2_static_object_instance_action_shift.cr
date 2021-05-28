@@ -2,7 +2,7 @@ module ActionShiftHandler::L2StaticObjectInstanceActionShift
   extend self
   extend ActionShiftHandler
 
-  def action(pc, target, interact) : Bool
+  def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
     if pc.access_level.gm?
       pc.target = target
       obj = target

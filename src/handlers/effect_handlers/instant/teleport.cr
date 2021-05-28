@@ -1,5 +1,5 @@
 class EffectHandler::Teleport < AbstractEffect
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     x = params.get_i32("x", 0)

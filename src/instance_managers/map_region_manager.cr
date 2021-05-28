@@ -14,7 +14,7 @@ module MapRegionManager
     info { "Loaded #{REGIONS.size} regions." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "region") do |d|
         name = parse_string(d, "name")

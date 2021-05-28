@@ -28,6 +28,8 @@ module SkillTreesData
 
   private PARENT_CLASS_MAP = EnumMap(ClassId, ClassId).new
 
+  private COMPLETE_CLASS_SKILL_TREE = EnumMap(ClassId, Hash(Int32, L2SkillLearn)).new
+
   class_getter? loading = false
 
   def load
@@ -54,6 +56,8 @@ module SkillTreesData
     SKILLS_BY_RACE_HASH_CODES.clear
     ALL_SKILLS_HASH_CODES.clear
 
+    COMPLETE_CLASS_SKILL_TREE.clear
+
     parse_datapack_directory("skillTrees")
     generate_check_arrays
     report
@@ -62,7 +66,7 @@ module SkillTreesData
     info { "Skill trees loaded in #{timer} s." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     c_id = -1
     class_id = nil
 
@@ -215,19 +219,23 @@ module SkillTreesData
   end
 
   def get_complete_class_skill_tree(class_id : ClassId) : Hash(Int32, L2SkillLearn)
-    skill_tree = {} of Int32 => L2SkillLearn
+    COMPLETE_CLASS_SKILL_TREE.store_if_absent(class_id) do
+      skill_tree = {} of Int32 => L2SkillLearn
+      COMPLETE_CLASS_SKILL_TREE[class_id] = skill_tree
 
-    skill_tree.merge!(COMMON_SKILL_TREE)
+      skill_tree.merge!(COMMON_SKILL_TREE)
 
-    while class_id
-      if temp = CLASS_SKILL_TREES[class_id]?
-        skill_tree.merge!(temp)
+      current = class_id
+      while current
+        if temp = CLASS_SKILL_TREES[current]?
+          skill_tree.merge!(temp)
+        end
+
+        current = PARENT_CLASS_MAP[current]?
       end
 
-      class_id = PARENT_CLASS_MAP[class_id]?
+      skill_tree
     end
-
-    skill_tree
   end
 
   def get_transfer_skill_tree(class_id : ClassId) : Hash(Int32, L2SkillLearn)
@@ -425,40 +433,29 @@ module SkillTreesData
   end
 
   def get_available_transform_skills(pc : L2PcInstance) : Array(L2SkillLearn)
-    result = [] of L2SkillLearn
     race = pc.race
 
-    TRANSFORM_SKILL_TREE.each_value do |skill|
+    TRANSFORM_SKILL_TREE.select_values do |skill|
       if pc.level >= skill.get_level && skill.races.empty? || skill.races.includes?(race)
         if old_skill = pc.skills[skill.skill_id]?
-          if old_skill.level == skill.skill_level &- 1
-            result << skill
-          end
-        elsif skill.skill_level == 1
-          result << skill
+          old_skill.level == skill.skill_level &- 1
+        else
+          skill.skill_level == 1
         end
       end
     end
-
-    result
   end
 
   def get_available_pledge_skills(clan : L2Clan) : Array(L2SkillLearn)
-    result = [] of L2SkillLearn
-
-    PLEDGE_SKILL_TREE.each_value do |skill|
+    PLEDGE_SKILL_TREE.select_values do |skill|
       if !skill.residencial_skill? && clan.level >= skill.get_level
         if old_skill = clan.skills[skill.skill_id]?
-          if old_skill.level &+ 1 == skill.skill_level
-            result << skill
-          end
-        elsif skill.skill_level == 1
-          result << skill
+          old_skill.level &+ 1 == skill.skill_level
+        else
+          skill.skill_level == 1
         end
       end
     end
-
-    result
   end
 
   def get_max_pledge_skills(clan : L2Clan, include_squad : Bool) : Hash(Int32, L2SkillLearn)
@@ -585,7 +582,7 @@ module SkillTreesData
       return true
     end
 
-    HERO_SKILL_TREE.any? { |_, s| s.skill_id == id && lvl == -1 }
+    lvl == -1 && HERO_SKILL_TREE.any? { |_, s| s.skill_id == id }
   end
 
   def gm_skill?(id : Int32, lvl : Int32) : Bool
@@ -648,7 +645,7 @@ module SkillTreesData
   end
 
   def get_available_residential_skills(id : Int32) : Enumerable(L2SkillLearn)
-    PLEDGE_SKILL_TREE.local_each_value.select do |skill|
+    PLEDGE_SKILL_TREE.select_values do |skill|
       skill.residencial_skill? && skill.residence_ids.includes?(id)
     end
   end

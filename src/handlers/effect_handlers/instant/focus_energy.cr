@@ -1,7 +1,7 @@
 class EffectHandler::FocusEnergy < AbstractEffect
   @charge : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @charge = params.get_i32("charge", 0)
   end

@@ -89,7 +89,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
     when "reset_busy_state"
       if npc
         npc.variables.delete("BUSY_STATE")
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
       end
     when "return_home"
       MAHUM_SOLDIERS.each do |npc_id|
@@ -135,7 +135,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
           if receiver.can_be_attacked?
             receiver.as(L2Attackable).clear_aggro_list
           end
-          receiver.disable_core_ai(true)
+          receiver.core_ai_disabled = true
           receiver.variables["BUSY_STATE"] = 1
           receiver.running = true
           dst = Location.new(
@@ -170,7 +170,7 @@ class Scripts::SelMahumDrill < AbstractNpcAI
     end
 
     # Restore AI handling by core
-    npc.disable_core_ai(false)
+    npc.core_ai_disabled = false
     super
   end
 

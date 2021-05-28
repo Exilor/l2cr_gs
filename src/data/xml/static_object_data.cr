@@ -10,7 +10,7 @@ module StaticObjectData
     info { "Loaded #{STATIC_OBJECTS.size} static object templates." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n,"object") do |d|
         add_object(get_attributes(d))

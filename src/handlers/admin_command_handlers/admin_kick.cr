@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminKick
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?("admin_kick")
       st = command.split
       if st.size > 1
@@ -10,7 +10,7 @@ module AdminCommandHandler::AdminKick
         player = st.shift
         if plyr = L2World.get_player(player)
           plyr.logout
-          pc.send_message("You kicked #{plyr.name} from the game.")
+          pc.send_message("You kicked #{plyr} from the game.")
         end
       end
     end

@@ -996,7 +996,7 @@ class Scripts::CrystalCaverns < AbstractInstance
           npc.add_skill(PHYSICAL_UP.skill)
           npc.add_skill(MAGICAL_UP.skill)
           world.alarm = add_spawn(ALARM, spawn_loc[0], spawn_loc[1], spawn_loc[2], 10800, false, 0, false, world.instance_id)
-          world.alarm.disable_core_ai(true)
+          world.alarm.core_ai_disabled = true
           world.alarm.immobilized = true
           world.alarm.broadcast_packet(CreatureSay.new(world.alarm.l2id, 1, world.alarm.name, NpcString::AN_ALARM_HAS_BEEN_SET_OFF_EVERYBODY_WILL_BE_IN_DANGER_IF_THEY_ARE_NOT_TAKEN_CARE_OF_IMMEDIATELY))
         end

@@ -14,7 +14,7 @@ module CategoryData
     info { "Loaded #{CATEGORIES.size} categories in #{timer} s." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |node|
       find_element(node, "category") do |list_node|
         if category_type = parse_enum(list_node, "name", CategoryType, nil)

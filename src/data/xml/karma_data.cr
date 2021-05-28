@@ -10,7 +10,7 @@ module KarmaData
     info { "Loaded #{KARMA_TABLE.size} karma modifiers." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "pcKarmaIncrease") do |n|
       find_element(n, "increase") do |d|
         lvl = parse_int(d, "lvl")

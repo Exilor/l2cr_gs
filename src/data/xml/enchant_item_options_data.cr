@@ -11,7 +11,7 @@ module EnchantItemOptionsData
     parse_datapack_file("enchantItemOptions.xml")
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     count = 0
 
     find_element(doc, "list") do |list|

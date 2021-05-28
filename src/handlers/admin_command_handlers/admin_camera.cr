@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminCamera
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     unless target = pc.target.as?(L2Character)
       pc.send_packet(SystemMessageId::TARGET_CANT_FOUND)
       return false

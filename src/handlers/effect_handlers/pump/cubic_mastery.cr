@@ -1,7 +1,7 @@
 class EffectHandler::CubicMastery < AbstractEffect
   @cubic_count : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @cubic_count = params.get_i32("cubicCount", 1)
   end

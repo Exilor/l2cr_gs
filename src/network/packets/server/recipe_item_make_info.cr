@@ -11,7 +11,7 @@ class Packets::Outgoing::RecipeItemMakeInfo < GameServerPacket
       d @pc.max_mp
       d @success ? 1 : 0
     else
-      warn { "#{client.active_char.try &.name} requested recipe #{@id} but it wasn't found." }
+      warn { "#{client.active_char} requested recipe #{@id} but it wasn't found." }
     end
   end
 end

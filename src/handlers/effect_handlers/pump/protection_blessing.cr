@@ -1,5 +1,5 @@
 class EffectHandler::ProtectionBlessing < AbstractEffect
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::PROTECTION_BLESSING.mask
   end
 

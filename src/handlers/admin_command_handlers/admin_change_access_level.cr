@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminChangeAccessLevel
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     parts = command.split
     if parts.size == 2
       begin
@@ -47,7 +47,7 @@ module AdminCommandHandler::AdminChangeAccessLevel
         access_lvl = AdminData.get_access_level(lvl)
         target.access_level = lvl
         target.send_message("Your access level has been changed to #{access_lvl.name} (#{access_lvl.level}).")
-        pc.send_message("#{target.name}'s access level has been changed to #{access_lvl.name} (#{access_lvl.level}).")
+        pc.send_message("#{target}'s access level has been changed to #{access_lvl.name} (#{access_lvl.level}).")
       else
         pc.send_message("Access level #{lvl} does not exist.")
       end

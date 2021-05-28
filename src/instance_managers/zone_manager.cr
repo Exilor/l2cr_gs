@@ -59,7 +59,7 @@ module ZoneManager
     SETTINGS.clear
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     rs = [] of {Int32, Int32}
 
     find_element(doc, "list") do |n|
@@ -208,7 +208,7 @@ module ZoneManager
   end
 
   private def check_id(id : Int) : Bool
-    CLASS_ZONES.local_each_value.any? &.has_key?(id)
+    CLASS_ZONES.any? { |_, map| map.has_key?(id) }
   end
 
   private def add_zone(id : Int32, zone : L2ZoneType)
@@ -228,7 +228,7 @@ module ZoneManager
   end
 
   def get_all_zones(zone_type : T.class, & : T ->) forall T
-    CLASS_ZONES[zone_type].each_value { |zone| yield(zone.as(T)) }
+    CLASS_ZONES[zone_type].each_value { |zone| yield zone.as(T) }
   end
 
   def get_zone_by_id(id : Int32) : L2ZoneType?
@@ -256,7 +256,7 @@ module ZoneManager
   end
 
   def get_zones(obj : L2Object, & : L2ZoneType ->) : Nil
-    get_zones(*obj.xyz) { |zone| yield(zone) }
+    get_zones(*obj.xyz) { |zone| yield zone }
   end
 
   def get_zones(x : Int32, y : Int32, & : L2ZoneType ->) : Nil
@@ -285,8 +285,9 @@ module ZoneManager
   end
 
   def get_spawn_territories(object : L2Object, & : NpcSpawnTerritory ->) : Nil
+    x, y, z = object.xyz
     SPAWN_TERRITORIES.each_value do |territory|
-      if territory.inside_zone?(*object.xyz)
+      if territory.inside_zone?(x, y, z)
         yield territory
       end
     end

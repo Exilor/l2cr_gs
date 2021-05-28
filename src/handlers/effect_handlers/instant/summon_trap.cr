@@ -4,7 +4,7 @@ class EffectHandler::SummonTrap < AbstractEffect
   @despawn_time : Int32
   @npc_id : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @despawn_time = params.get_i32("despawnTime", 0)

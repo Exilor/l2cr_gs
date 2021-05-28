@@ -33,6 +33,9 @@ class Packets::Outgoing::RelationChanged < GameServerPacket
   end
 
   private def write_impl
+    c 0xce
+
+    d 1
     d @l2id
     d @relation
     d @auto_attackable ? 1 : 0

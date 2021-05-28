@@ -95,10 +95,6 @@ class L2Npc < L2Character
     template.ai_type
   end
 
-  def dodge : Int32
-    template.dodge
-  end
-
   def chaos? : Bool
     template.chaos?
   end

@@ -2,7 +2,7 @@ abstract class AbstractPlayerGroup
   include Enumerable(L2PcInstance)
   include Packets::Outgoing
 
-  abstract def members# : Enumerable(L2PcInstance)
+  abstract def members : Array(L2PcInstance) | Concurrent::Array(L2PcInstance)
   abstract def leader : L2PcInstance
   abstract def leader=(pc : L2PcInstance)
   abstract def level : Int32
@@ -44,16 +44,6 @@ abstract class AbstractPlayerGroup
 
   def random_player : L2PcInstance
     members.sample(random: Rnd)
-  end
-
-  def each_with_summon(& : L2PcInstance | L2Summon ->) : Nil
-    each do |m|
-      yield m
-
-      if s = m.summon
-        yield s
-      end
-    end
   end
 
   def to_s(io : IO)

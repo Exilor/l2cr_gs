@@ -6,7 +6,7 @@ module AdminCommandHandler::AdminMonsterRace
 
   protected class_property state : Int32 = -1
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.casecmp?("admin_mons")
       handle_send_packet(pc)
     end

@@ -3,7 +3,7 @@ module AdminCommandHandler::AdminEditChar
   extend AdminCommandHandler
   include Packets::Outgoing
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_current_player"
       show_character_info(pc, pc)
     elsif command.starts_with?("admin_character_info")

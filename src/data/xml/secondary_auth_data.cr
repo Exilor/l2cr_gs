@@ -17,7 +17,7 @@ module SecondaryAuthData
     info { "Loaded #{FORBIDDEN_PASSWORDS.size} forbidden passwords." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |node|
       each_element(node) do |list_node, list_node_name|
         case list_node_name.casecmp

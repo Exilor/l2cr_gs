@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminCHSiege
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     split = command.split
 
     if Config.alt_dev_no_quests

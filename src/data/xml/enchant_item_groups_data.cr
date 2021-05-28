@@ -31,7 +31,7 @@ module EnchantItemGroupsData
     SCROLL_GROUPS[id]?
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       each_element(n) do |d, d_name|
         if d_name.casecmp?("enchantRateGroup")

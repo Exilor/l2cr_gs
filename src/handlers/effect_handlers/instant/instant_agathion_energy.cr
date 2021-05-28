@@ -4,7 +4,7 @@ class EffectHandler::InstantAgathionEnergy < AbstractEffect
   @energy : Float64
   @mode : EffectCalculationType
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @energy = params.get_f64("energy", 0)

@@ -224,7 +224,6 @@ abstract class ItemContainer
         refresh_weight
       else
         return if item.count < count
-
         return unless remove_item(item)
 
         ItemTable.destroy_item(process, item, actor, reference)

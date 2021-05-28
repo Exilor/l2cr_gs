@@ -1,8 +1,6 @@
 module GameDB
   module PetDAO
-    macro extended
-      include Loggable
-    end
+    include Loggable
 
     abstract def update_food(pc : L2PcInstance, pet_id : Int32)
     abstract def delete(pet : L2PetInstance)

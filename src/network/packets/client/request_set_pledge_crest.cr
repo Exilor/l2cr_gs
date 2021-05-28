@@ -1,6 +1,6 @@
 class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
   @length = 0
-  @data : Bytes?
+  @data = Bytes.empty
 
   private def read_impl
     @length = d
@@ -13,7 +13,6 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
   end
 
   private def run_impl
-    return unless _data = @data
     return unless pc = active_char
 
     if @length < 0
@@ -49,7 +48,7 @@ class Packets::Incoming::RequestSetPledgeCrest < GameClientPacket
         return
       end
 
-      if crest = CrestTable.create_crest(_data, L2Crest::PLEDGE)
+      if crest = CrestTable.create_crest(@data, L2Crest::PLEDGE)
         clan.change_clan_crest(crest.id)
         pc.send_packet(SystemMessageId::CLAN_CREST_WAS_SUCCESSFULLY_REGISTRED)
       end

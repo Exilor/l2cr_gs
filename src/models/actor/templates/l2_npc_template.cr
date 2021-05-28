@@ -1,9 +1,11 @@
 require "./l2_char_template"
+require "./npc_template_flags"
 require "../../../enums/sex"
 require "../../../enums/ai_type"
 require "../../../enums/ai_skill_scope"
 
 class L2NpcTemplate < L2CharTemplate
+  @npc_template_flags = NpcTemplateFlags.new
   @clans : Set(Int32)?
   @minions : Hash(String, Slice(MinionHolder))?
   @skill_holders : Hash(String, SkillHolder)?
@@ -30,7 +32,6 @@ class L2NpcTemplate < L2CharTemplate
   getter ai_type = AIType::FIGHTER
   getter aggro_range = 0
   getter clan_help_range = 0
-  getter dodge = 0
   getter soulshot = 0
   getter spiritshot = 0
   getter soulshot_chance = 0
@@ -39,21 +40,6 @@ class L2NpcTemplate < L2CharTemplate
   getter max_skill_chance = 0
   getter collision_radius_grown = 0.0
   getter collision_height_grown = 0.0
-  getter? using_server_side_name = false
-  getter? using_server_side_title = false
-  getter? unique = false
-  getter? attackable = false
-  getter? targetable = false
-  getter? undying = false
-  getter? show_name = false
-  getter? flying = false
-  getter? can_move = false
-  getter? no_sleep_mode = false
-  getter? passable_door = false
-  getter? has_summoner = false
-  getter? can_be_sown = false
-  getter? chaos = false
-  getter? aggressive = false
   setter skills : Hash(Int32, Skill)?
   property parameters : StatsSet = StatsSet::EMPTY
 
@@ -69,9 +55,9 @@ class L2NpcTemplate < L2CharTemplate
     @level = set.get_i8("level", 70)
     @type = set.get_string("type", "L2Npc")
     @name = set.get_string("name", "")
-    @using_server_side_name = set.get_bool("usingServerSideName", false)
+    @npc_template_flags.using_server_side_name = set.get_bool("usingServerSideName", false)
     @title = set.get_string("title", "")
-    @using_server_side_title = set.get_bool("usingServerSideTitle", false)
+    @npc_template_flags.using_server_side_title = set.get_bool("usingServerSideTitle", false)
     @race = set.get_enum("race", Race, Race::NONE)
     @sex = set.get_enum("sex", Sex, Sex::ETC)
 
@@ -84,26 +70,25 @@ class L2NpcTemplate < L2CharTemplate
     @sp = set.get_f64("sp", 0)
     @raid_points = set.get_f64("raidPoints", 0)
 
-    @unique = set.get_bool("unique", false)
-    @attackable = set.get_bool("attackable", true)
-    @targetable = set.get_bool("targetable", true)
-    @undying = set.get_bool("undying", true)
-    @show_name = set.get_bool("showName", true)
-    @flying = set.get_bool("flying", false)
-    @can_move = set.get_bool("canMove", true)
-    @no_sleep_mode = set.get_bool("noSleepMode", false)
-    @passable_door = set.get_bool("passableDoor", false)
-    @has_summoner = set.get_bool("hasSummoner", false)
-    @can_be_sown = set.get_bool("canBeSown", false)
+    @npc_template_flags.unique = set.get_bool("unique", false)
+    @npc_template_flags.attackable = set.get_bool("attackable", true)
+    @npc_template_flags.targetable = set.get_bool("targetable", true)
+    @npc_template_flags.undying = set.get_bool("undying", true)
+    @npc_template_flags.show_name = set.get_bool("showName", true)
+    @npc_template_flags.flying = set.get_bool("flying", false)
+    @npc_template_flags.can_move = set.get_bool("canMove", true)
+    @npc_template_flags.no_sleep_mode = set.get_bool("noSleepMode", false)
+    @npc_template_flags.passable_door = set.get_bool("passableDoor", false)
+    @npc_template_flags.has_summoner = set.get_bool("hasSummoner", false)
+    @npc_template_flags.can_be_sown = set.get_bool("canBeSown", false)
 
     @corpse_time = set.get_i32("corpseTime", Config.default_corpse_time)
 
     @ai_type = set.get_enum("aiType", AIType, AIType::FIGHTER)
     @aggro_range = set.get_i32("aggroRange", 0)
     @clan_help_range = set.get_i32("clanHelpRange", 0)
-    @dodge = set.get_i32("dodge", 0)
-    @chaos = set.get_bool("isChaos", false)
-    @aggressive = set.get_bool("isAggressive", true)
+    @npc_template_flags.chaos = set.get_bool("isChaos", false)
+    @npc_template_flags.aggressive = set.get_bool("isAggressive", true)
 
     @soulshot = set.get_i32("soulShot", 0)
     @spiritshot = set.get_i32("spiritShot", 0)
@@ -249,5 +234,65 @@ class L2NpcTemplate < L2CharTemplate
     end
 
     result
+  end
+
+  def unique? : Bool
+    @npc_template_flags.unique?
+  end
+
+  def attackable? : Bool
+    @npc_template_flags.attackable?
+  end
+
+  def targetable? : Bool
+    @npc_template_flags.targetable?
+  end
+
+  def flying? : Bool
+    @npc_template_flags.flying?
+  end
+
+  def undying? : Bool
+    @npc_template_flags.undying?
+  end
+
+  def can_move? : Bool
+    @npc_template_flags.can_move?
+  end
+
+  def using_server_side_name? : Bool
+    @npc_template_flags.using_server_side_name?
+  end
+
+  def using_server_side_title? : Bool
+    @npc_template_flags.using_server_side_title?
+  end
+
+  def show_name? : Bool
+    @npc_template_flags.show_name?
+  end
+
+  def aggressive? : Bool
+    @npc_template_flags.aggressive?
+  end
+
+  def no_sleep_mode? : Bool
+    @npc_template_flags.no_sleep_mode?
+  end
+
+  def passable_door? : Bool
+    @npc_template_flags.passable_door?
+  end
+
+  def has_summoner? : Bool
+    @npc_template_flags.has_summoner?
+  end
+
+  def can_be_sown? : Bool
+    @npc_template_flags.can_be_sown?
+  end
+
+  def chaos? : Bool
+    @npc_template_flags.chaos?
   end
 end

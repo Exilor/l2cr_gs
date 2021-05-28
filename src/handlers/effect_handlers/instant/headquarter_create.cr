@@ -3,7 +3,7 @@ class EffectHandler::HeadquarterCreate < AbstractEffect
 
   @advanced : Bool
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @advanced = params.get_bool("isAdvanced", false)
   end

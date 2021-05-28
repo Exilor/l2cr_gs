@@ -1,8 +1,6 @@
 module GameDB
   module SkillDAO
-    macro extended
-      include Loggable
-    end
+    include Loggable
 
     abstract def insert(pc : L2PcInstance, class_index : Int32, skill : Skill)
     abstract def update(pc : L2PcInstance, class_index : Int32, new_skill : Skill, old_skill : Skill)

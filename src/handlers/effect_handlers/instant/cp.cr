@@ -2,7 +2,7 @@ class EffectHandler::Cp < AbstractEffect
   @amount : Float64
   @mode : EffectCalculationType
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @amount = params.get_f64("amount", 0)
@@ -38,6 +38,8 @@ class EffectHandler::Cp < AbstractEffect
     if amount != 0
       target.current_cp += amount
     end
+
+    return unless target.acting_player
 
     if amount >= 0
       if char && char != target

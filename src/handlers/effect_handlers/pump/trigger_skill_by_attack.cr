@@ -10,7 +10,7 @@ class EffectHandler::TriggerSkillByAttack < AbstractEffect
   @attacker_type : InstanceType
   @critical : Bool
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @min_attacker_level = params.get_i32("minAttackerLevel", 1)

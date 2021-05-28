@@ -20,10 +20,6 @@ class L2Weapon < L2Item
   getter reduced_soulshot_chance : Int32
   getter reduced_mp_consume : Int32
   getter reduced_mp_consume_chance : Int32
-  getter? magic_weapon : Bool
-  getter? force_equip : Bool
-  getter? attack_weapon : Bool
-  getter? use_weapon_skills_only : Bool
 
   def initialize(set)
     super
@@ -31,7 +27,7 @@ class L2Weapon < L2Item
     @item_type = set.get_enum("weapon_type", WeaponType, WeaponType::NONE)
     @type_1 = ItemType1::WEAPON_RING_EARRING_NECKLACE
     @type_2 = ItemType2::WEAPON
-    @magic_weapon = set.get_bool("is_magic_weapon", false)
+    @item_flags.magic_weapon = set.get_bool("is_magic_weapon", false)
     @soulshot_count = set.get_i32("soulshots", 0)
     @spiritshot_count = set.get_i32("spiritshots", 0)
     @random_damage = set.get_i32("random_damage", 0)
@@ -51,9 +47,9 @@ class L2Weapon < L2Item
     @reduced_mp_consume_chance = rm.size == 2 ? rm[0].to_i : 0
     @reduced_mp_consume = rm.size == 2 ? rm[1].to_i : 0
     @change_weapon_id = set.get_i32("change_weaponId", 0)
-    @force_equip = set.get_bool("isForceEquip", false)
-    @attack_weapon = set.get_bool("isAttackWeapon", true)
-    @use_weapon_skills_only = set.get_bool("useWeaponSkillsOnly", false)
+    @item_flags.force_equip = set.get_bool("isForceEquip", false)
+    @item_flags.attack_weapon = set.get_bool("isAttackWeapon", true)
+    @item_flags.use_weapon_skills_only = set.get_bool("useWeaponSkillsOnly", false)
 
     skill = set.get_string("enchant4_skill", nil)
     unless skill.nil? || skill.empty?
@@ -97,7 +93,7 @@ class L2Weapon < L2Item
   end
 
   def mask : UInt32
-    @item_type.mask
+    @item_type.mask.to_u32
   end
 
   def enchant_4_skill : Skill?
@@ -166,5 +162,21 @@ class L2Weapon < L2Item
       sm.add_skill_name(skill)
       caster.send_packet(sm)
     end
+  end
+
+  def magic_weapon? : Bool
+    @item_flags.magic_weapon?
+  end
+
+  def force_equip? : Bool
+    @item_flags.force_equip?
+  end
+
+  def attack_weapon? : Bool
+    @item_flags.attack_weapon?
+  end
+
+  def use_weapon_skills_only? : Bool
+    @item_flags.use_weapon_skills_only?
   end
 end

@@ -143,7 +143,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
     add_spell_finished_id(HALL_KEEPER_SUICIDAL_SOLDIER)
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     spawn_count = 0
 
     find_element(doc, "list") do |list|
@@ -419,7 +419,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
       npc.can_see_through_silent_move = true
     end
     if AI_DISABLED_MOBS.includes?(npc_id)
-      npc.disable_core_ai(true)
+      npc.core_ai_disabled = true
     end
     if npc_id == DARK_CHOIR_PLAYER
       world.dark_choir_player_count &+= 1
@@ -686,7 +686,7 @@ class Scripts::FinalEmperialTomb < AbstractInstance
         @world.active_scarlet.set_running
         @world.active_scarlet.do_cast(INTRO_SKILL)
         @world.frintezza.enable_all_skills
-        @world.frintezza.disable_core_ai(true)
+        @world.frintezza.core_ai_disabled = true
         @world.frintezza.mortal = false
         start_pc
 

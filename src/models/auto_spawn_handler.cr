@@ -217,7 +217,7 @@ module AutoSpawnHandler
       if npc_inst
         nearest_town = MapRegionManager.get_closest_town_name(npc_inst)
         if sp.broadcasting?
-          Broadcast.to_all_online_players("The #{npc_inst.name} has spawned near #{nearest_town}.")
+          Broadcast.to_all_online_players("The #{npc_inst} has spawned near #{nearest_town}.")
         end
       end
 

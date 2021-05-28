@@ -1,8 +1,6 @@
 module GameDB
   module TopicDAO
-    macro extended
-      include Loggable
-    end
+    include Loggable
 
     abstract def load(forum : Forum)
     abstract def save(topic : Topic)

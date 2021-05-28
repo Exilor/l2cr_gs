@@ -27,7 +27,7 @@ class Scripts::Knoriks < AbstractNpcAI
     when "CORE_AI"
       if npc
         npc.as(L2Attackable).clear_aggro_list
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
       end
     when "CHECK_ROUTE"
       WalkingManager.on_spawn(npc.not_nil!)
@@ -62,7 +62,7 @@ class Scripts::Knoriks < AbstractNpcAI
     end
 
     if npc.calculate_distance(npc.spawn, false, false) > MAX_CHASE_DIST || (npc.z - npc.spawn.z).abs > 450
-      npc.disable_core_ai(true)
+      npc.core_ai_disabled = true
       npc.tele_to_location(npc.spawn)
     end
 

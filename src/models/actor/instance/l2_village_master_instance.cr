@@ -437,7 +437,7 @@ class L2VillageMasterInstance < L2NpcInstance
     pc.get_quest_state("Q00235_MimirsElixir")
   end
 
-  private def get_available_subclasses(pc : L2PcInstance) # : EnumSet(PlayerClass)?
+  private def get_available_subclasses(pc : L2PcInstance) : Set(PlayerClass)?
     current_base_id = pc.base_class
     base_cid = ClassId[current_base_id]
     if base_cid.level > 2

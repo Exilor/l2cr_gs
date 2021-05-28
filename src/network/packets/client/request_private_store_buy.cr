@@ -85,7 +85,7 @@ class Packets::Incoming::RequestPrivateStoreBuy < GameClientPacket
     if result > 0
       action_failed
       if result > 1
-        warn { "Private store buy has failed due to invalid list or request. Player: #{pc}, store owner: #{store_player.name}." }
+        warn { "Private store buy has failed due to invalid list or request. Player: #{pc}, store owner: #{store_player}." }
       end
       return
     end

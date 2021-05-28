@@ -38,7 +38,6 @@ module GameDB
     def load(pc : L2PcInstance)
       GameDB.each(SELECT, pc.l2id) do |rs|
         item_id = rs.get_i32(:"itemId")
-        # item_l2id = rs.get_i32(:"itemObjId") # unused
         reuse_delay = rs.get_i64(:"reuseDelay")
         systime = rs.get_i64(:"systime")
         in_inventory = true
@@ -52,14 +51,6 @@ module GameDB
           remaining = systime - Time.ms
           if remaining > 10
             pc.add_time_stamp_item(item, reuse_delay, systime)
-            if in_inventory && item.etc_item?
-              group = item.shared_reuse_group
-              if group > 0
-                debug { "Shared reuse group: #{group}." }
-                p = Packets::Outgoing::ExUseSharedGroupItem.new(item_id, group, remaining.to_i32, reuse_delay.to_i32)
-                pc.send_packet(p)
-              end
-            end
           end
         end
       end

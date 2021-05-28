@@ -7,7 +7,7 @@ class EffectHandler::SummonNpc < AbstractEffect
   @random_offset : Bool
   @is_summon_spawn : Bool
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @despawn_delay = params.get_i32("despawnDelay", 20_000)

@@ -85,7 +85,7 @@ module ClanHallSiegeManager
   end
 
   def clan_participating?(clan : L2Clan) : Bool
-    conquerable_halls.local_each_value.any? do |hall|
+    conquerable_halls.any? do |_, hall|
       (siege = hall.siege?) && siege.attacker?(clan)
     end
   end

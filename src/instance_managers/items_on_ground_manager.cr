@@ -18,9 +18,7 @@ module ItemsOnGroundManager
       empty_table
     end
 
-    unless Config.save_dropped_item
-      return
-    end
+    return unless Config.save_dropped_item
 
     total = 0
     timer = Timer.new
@@ -108,9 +106,7 @@ module ItemsOnGroundManager
 
   def call
     sync do
-      unless Config.save_dropped_item
-        return
-      end
+      return unless Config.save_dropped_item
 
       empty_table
 
@@ -126,9 +122,7 @@ module ItemsOnGroundManager
       begin
         GameDB.transaction do |tr|
           ITEMS.each do |item|
-            if CursedWeaponsManager.cursed?(item.id)
-              next
-            end
+            next if CursedWeaponsManager.cursed?(item.id)
 
             tr.exec(
               sql,

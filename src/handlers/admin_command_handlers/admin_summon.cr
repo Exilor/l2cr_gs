@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminSummon
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     id = 0
     count = 1
     data = command.split

@@ -23,7 +23,7 @@ class AffectScope < EnumClass
 
     affect_limit = skill.affect_limit
     affect_object = skill.affect_object
-    targets = Array(L2Object).new(affect_limit)
+    targets = Array(L2Object).new
 
     L2World.get_visible_objects(target, skill.affect_range) do |object|
       if affect_limit > 0 && targets.size >= affect_limit
@@ -58,7 +58,7 @@ class AffectScope < EnumClass
 
   add(PARTY, AffectProc.new { |caster, target, skill|
     affect_range = skill.affect_range
-    targets = Array(L2Object).new(affect_range) # affect *range* as initial size?
+    targets = Array(L2Object).new
 
     if party = caster.party
       party.members.each do |m|
@@ -93,7 +93,7 @@ class AffectScope < EnumClass
   add(PLEDGE, AffectProc.new { |caster, target, skill|
     affect_range = skill.affect_range
     affect_limit = skill.affect_limit
-    targets = Array(L2Object).new(affect_limit)
+    targets = Array(L2Object).new
 
     if caster.player?
       if clan = caster.clan
@@ -154,7 +154,7 @@ class AffectScope < EnumClass
   add(POINT_BLANK, AffectProc.new { |caster, target, skill|
     affect_limit = skill.affect_limit
     affect_object = skill.affect_object
-    targets = Array(L2Object).new(affect_limit)
+    targets = Array(L2Object).new
 
     caster.known_list.get_known_characters_in_radius(skill.affect_range) do |char|
       break if affect_limit > 0 && targets.size >= affect_limit
@@ -167,7 +167,7 @@ class AffectScope < EnumClass
 
   add(RANGE, AffectProc.new { |caster, target, skill|
     affect_limit = skill.affect_limit
-    targets = Array(L2Object).new(affect_limit)
+    targets = Array(L2Object).new
 
     L2World.get_visible_objects(target, skill.affect_range) do |obj|
       break if affect_limit > 0 && targets.size >= affect_limit
@@ -179,10 +179,6 @@ class AffectScope < EnumClass
   })
 
   add(RANGE_SORT_BY_HP, AffectProc.new { |caster, target, skill|
-    # if targets = RANGE.get_affected_targets(caster, target, skill)
-    #   targets.sort_by! &.as(L2Character).hp_percent
-    # end
-
     ret = [] of L2Character
     L2World.get_visible_objects(target, skill.affect_range) do |obj|
       if obj.is_a?(L2Character)

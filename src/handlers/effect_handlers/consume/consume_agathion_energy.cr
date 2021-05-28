@@ -1,11 +1,11 @@
 class EffectHandler::ConsumeAgathionEnergy < AbstractEffect
   @energy : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @energy = params.get_i32("energy", 0)
-    self.ticks = params.get_i32("ticks")
+    @ticks = params.get_i32("ticks")
   end
 
   def on_action_time(info : BuffInfo) : Bool

@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminHellbound
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command.starts_with?(commands[0])
       begin
         st = command.split

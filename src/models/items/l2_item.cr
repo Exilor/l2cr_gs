@@ -1,3 +1,4 @@
+require "./item_flags"
 require "../events/listeners_container"
 require "../../enums/material_type"
 require "../../enums/crystal_type"
@@ -50,6 +51,7 @@ abstract class L2Item < ListenersContainer
   @pre_conditions = Slice(Condition).empty
   @func_templates = Slice(FuncTemplate).empty
   @unequip_skill : SkillHolder?
+  @item_flags = ItemFlags.new
 
   getter display_id : Int32
   getter name : String
@@ -72,25 +74,8 @@ abstract class L2Item < ListenersContainer
   getter reuse_delay : Int32
   getter shared_reuse_group : Int32
   getter skills = Slice(SkillHolder).empty
-  getter! type_1 : ItemType1
-  getter! type_2 : ItemType2
-  getter? stackable : Bool
-  getter? sellable : Bool
-  getter? droppable : Bool
-  getter? destroyable : Bool
-  getter? tradeable : Bool
-  getter? depositable : Bool
-  getter? elementable : Bool
-  getter? quest_item : Bool
-  getter? freightable : Bool
-  getter? hero_item : Bool
-  getter? for_npc : Bool
-  getter? common : Bool
-  getter? pvp_item : Bool
-  getter? allows_self_resurrection : Bool
-  getter? has_immediate_effect : Bool
-  getter? has_ex_immediate_effect : Bool
-  getter? oly_restricted_item : Bool
+  getter type_1 = ItemType1::WEAPON_RING_EARRING_NECKLACE
+  getter type_2 = ItemType2::WEAPON
 
   def initialize(set)
     @item_id = set.get_i32("item_id")
@@ -108,22 +93,22 @@ abstract class L2Item < ListenersContainer
     @crystal_type = set.get_enum("crystal_type", CrystalType, CrystalType::NONE)
     @crystal_count = set.get_i32("crystal_count", 0)
 
-    @stackable = set.get_bool("is_stackable", false)
-    @sellable = set.get_bool("is_sellable", true)
-    @droppable = set.get_bool("is_dropable", true)
-    @destroyable = set.get_bool("is_destroyable", true)
-    @tradeable = set.get_bool("is_tradable", true)
-    @depositable = set.get_bool("is_depositable", true)
-    @elementable = set.get_bool("element_enabled", false)
-    @enchantable = set.get_i32 "enchant_enabled", 0
-    @quest_item = set.get_bool("is_questitem", false)
-    @freightable = set.get_bool("is_freightable", false)
-    @allows_self_resurrection = set.get_bool("allow_self_resurrection", false)
-    @oly_restricted_item = set.get_bool("is_oly_restricted", false)
-    @for_npc = set.get_bool("for_npc", false)
+    @item_flags.stackable = set.get_bool("is_stackable", false)
+    @item_flags.sellable = set.get_bool("is_sellable", true)
+    @item_flags.droppable = set.get_bool("is_dropable", true)
+    @item_flags.destroyable = set.get_bool("is_destroyable", true)
+    @item_flags.tradeable = set.get_bool("is_tradable", true)
+    @item_flags.depositable = set.get_bool("is_depositable", true)
+    @item_flags.elementable = set.get_bool("element_enabled", false)
+    @item_flags.quest_item = set.get_bool("is_questitem", false)
+    @item_flags.freightable = set.get_bool("is_freightable", false)
+    @item_flags.allows_self_resurrection = set.get_bool("allow_self_resurrection", false)
+    @item_flags.oly_restricted_item = set.get_bool("is_oly_restricted", false)
+    @item_flags.for_npc = set.get_bool("for_npc", false)
+    @item_flags.has_immediate_effect = set.get_bool("immediate_effect", false)
+    @item_flags.has_ex_immediate_effect = set.get_bool("ex_immediate_effect", false)
 
-    @has_immediate_effect = set.get_bool("immediate_effect", false)
-    @has_ex_immediate_effect = set.get_bool("ex_immediate_effect", false)
+    @enchantable = set.get_i32("enchant_enabled", 0)
 
     @default_action = set.get_enum("default_action", ActionType, ActionType::NONE)
     @use_skill_dis_time = set.get_i32("useSkillDisTime", 0)
@@ -131,12 +116,30 @@ abstract class L2Item < ListenersContainer
     @reuse_delay = set.get_i32("reuse_delay", 0)
     @shared_reuse_group = set.get_i32("shared_reuse_group", 0)
 
-    @common = @item_id.between?(11605, 12361)
-    @hero_item = @item_id.between?(6611, 6621) || @item_id.between?(9388, 9390) || @item_id == 6842
-    @pvp_item = @item_id.between?(10667, 10835) || @item_id.between?(12852, 12977) || @item_id.between?(14363, 14525) || @item_id.in?(14528, 14529, 14558) || @item_id.between?(15913, 16024) || @item_id.between?(16134, 16147) || @item_id.in?(16149, 16151, 16153, 16155, 16157, 16159) || @item_id.between?(16168, 16176) || @item_id.between?(16179, 16220)
+    @item_flags.common = @item_id.between?(11605, 12361)
+
+    @item_flags.hero_item =
+    case @item_id
+    when 6611..6621, 9388..9390, 6842
+      true
+    else
+      false
+    end
+
+    @item_flags.pvp_item =
+    case @item_id
+    when 10667..10835, 12852..12977, 14525..14363, 14528, 14529, 14558
+      true
+    when 15913..16024, 16134..16147, 16149, 16151, 16153, 16155, 16157, 16159
+      true
+    when 16168..16176, 16179..16220
+      true
+    else
+      false
+    end
 
     skills = set.get_string("item_skill", nil)
-    unless skills.nil? || skills.empty?
+    if skills && !skills.empty?
       skills_split = skills.split(';')
       skill_holder = [] of SkillHolder
       skills_split.each do |element|
@@ -149,7 +152,7 @@ abstract class L2Item < ListenersContainer
     end
 
     skills = set.get_string("unequip_skill", nil)
-    unless skills.nil? || skills.empty?
+    if skills && !skills.empty?
       info = skills.split('-')
       if info.size == 2
         id = info[0].to_i
@@ -317,12 +320,10 @@ abstract class L2Item < ListenersContainer
         end
 
         if send_msg
-          msg = cond.message
-          msg_id = cond.message_id
-          if msg
+          if msg = cond.message
             char.send_message(msg)
-          elsif msg_id != 0
-            sm = SystemMessage[msg_id]
+          elsif cond.message_id != 0
+            sm = SystemMessage[cond.message_id]
             if cond.add_name?
               sm.add_item_name(@item_id)
             end
@@ -351,6 +352,74 @@ abstract class L2Item < ListenersContainer
 
   def enchant_4_skill : Skill?
     # return nil
+  end
+
+  def stackable? : Bool
+    @item_flags.stackable?
+  end
+
+  def sellable? : Bool
+    @item_flags.sellable?
+  end
+
+  def droppable? : Bool
+    @item_flags.droppable?
+  end
+
+  def destroyable? : Bool
+    @item_flags.destroyable?
+  end
+
+  def tradeable? : Bool
+    @item_flags.tradeable?
+  end
+
+  def depositable? : Bool
+    @item_flags.depositable?
+  end
+
+  def elementable? : Bool
+    @item_flags.elementable?
+  end
+
+  def quest_item? : Bool
+    @item_flags.quest_item?
+  end
+
+  def freightable? : Bool
+    @item_flags.freightable?
+  end
+
+  def hero_item? : Bool
+    @item_flags.hero_item?
+  end
+
+  def for_npc? : Bool
+    @item_flags.for_npc?
+  end
+
+  def common? : Bool
+    @item_flags.common?
+  end
+
+  def pvp_item? : Bool
+    @item_flags.pvp_item?
+  end
+
+  def allows_self_resurrection? : Bool
+    @item_flags.allows_self_resurrection?
+  end
+
+  def has_immediate_effect? : Bool
+    @item_flags.has_immediate_effect?
+  end
+
+  def has_ex_immediate_effect? : Bool
+    @item_flags.has_ex_immediate_effect?
+  end
+
+  def oly_restricted_item? : Bool
+    @item_flags.oly_restricted_item?
   end
 
   def to_s(io : IO)

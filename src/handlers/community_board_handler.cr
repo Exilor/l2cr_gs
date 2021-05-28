@@ -1,9 +1,7 @@
 module CommunityBoardHandler
   extend self
   include Loggable
-  macro extended
-    include Loggable
-  end
+  include Loggable
 
   private HANDLERS = {} of String => IParseBoardHandler
   private BYPASSES = Hash(Int32, String).new

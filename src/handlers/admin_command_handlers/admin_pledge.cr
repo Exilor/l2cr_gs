@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminPledge
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     unless player = pc.target.as?(L2PcInstance)
       pc.send_packet(SystemMessageId::INCORRECT_TARGET)
       show_main_page(pc)

@@ -3,7 +3,7 @@ class EffectHandler::Disarm < AbstractEffect
     info.effected.player?
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::DISARMED.mask
   end
 

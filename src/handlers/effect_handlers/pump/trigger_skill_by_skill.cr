@@ -5,7 +5,7 @@ class EffectHandler::TriggerSkillBySkill < AbstractEffect
   @chance : Int32
   @target_type : TargetType
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @cast_skill_id = params.get_i32("castSkillId", 0)

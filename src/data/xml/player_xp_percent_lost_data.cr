@@ -9,7 +9,7 @@ module PlayerXpPercentLostData
     parse_datapack_file("stats/chars/playerXpPercentLost.xml")
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "xpLost") do |d|
         level = parse_int(d, "level")

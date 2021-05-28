@@ -1,8 +1,6 @@
 require "../ai/l2_controllable_mob_ai"
 
 class L2ControllableMobInstance < L2MonsterInstance
-  property? invul : Bool = false
-
   def instance_type : InstanceType
     InstanceType::L2ControllableMobInstance
   end

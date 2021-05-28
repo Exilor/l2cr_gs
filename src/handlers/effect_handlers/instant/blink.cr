@@ -2,7 +2,7 @@ class EffectHandler::Blink < AbstractEffect
   @fly_course : Int32
   @fly_radius : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @fly_course = params.get_i32("flyCourse", 0)

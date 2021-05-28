@@ -55,7 +55,7 @@ module CastleManorManager
     info { "Loaded #{SEEDS.size} seeds." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "castle") do |d|
         castle_id = parse_int(d, "id")
@@ -391,29 +391,13 @@ module CastleManorManager
 
       PRODUCTION.each do |key, value|
         value.each do |sp|
-          tr.exec(
-            is,
-            key,
-            sp.id,
-            sp.amount,
-            sp.start_amount,
-            sp.price,
-            false
-          )
+          tr.exec(is, key, sp.id, sp.amount, sp.start_amount, sp.price, false)
         end
       end
 
       PRODUCTION_NEXT.each do |key, value|
         value.each do |sp|
-          tr.exec(
-            is,
-            key,
-            sp.id,
-            sp.amount,
-            sp.start_amount,
-            sp.price,
-            true
-          )
+          tr.exec(is, key, sp.id, sp.amount, sp.start_amount, sp.price, true)
         end
       end
 
@@ -457,9 +441,7 @@ module CastleManorManager
   end
 
   def reset_manor_data(castle_id : Int32)
-    unless Config.allow_manor
-      return
-    end
+    return unless Config.allow_manor
 
     PROCURE[castle_id].clear
     PROCURE_NEXT[castle_id].clear
@@ -513,15 +495,21 @@ module CastleManorManager
   end
 
   def get_seeds_for_castle(castle_id : Int32) : Set(L2Seed)
-    SEEDS.local_each_value.select { |s| s.castle_id == castle_id }.to_set
+    set = Set(L2Seed).new
+    SEEDS.each_value { |s| set << s if s.castle_id == castle_id }
+    set
   end
 
   def seed_ids : Set(Int32)
-    SEEDS.local_each_key.to_set
+    set = Set(Int32).new(initial_capacity: SEEDS.size)
+    SEEDS.each_key { |k| set << k }
+    set
   end
 
   def crop_ids : Set(Int32)
-    SEEDS.local_each_value.map(&.crop_id).to_set
+    set = Set(Int32).new
+    SEEDS.each_value { |s| set << s.crop_id }
+    set
   end
 
   def get_seed(seed_id : Int32) : L2Seed?
@@ -533,6 +521,6 @@ module CastleManorManager
   end
 
   def get_seed_by_crop(crop_id : Int32) : L2Seed?
-    SEEDS.local_each_value.find { |s| s.crop_id == crop_id }
+    SEEDS.find_value { |s| s.crop_id == crop_id }
   end
 end

@@ -17,7 +17,7 @@ module InitialEquipmentData
     info { "Loaded #{DATA.size} initial equipment data." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "equipment") { |d| parse_equipment(d) }
     end

@@ -3,7 +3,7 @@ require "../../../models/holders/unique_item_holder"
 class Packets::Incoming::RequestProcureCropList < GameClientPacket
   private BATCH_LENGTH = 20
 
-  @items : Slice(CropHolder) = Slice(CropHolder).empty
+  @items = Slice(CropHolder).empty
 
   private def read_impl
     count = d

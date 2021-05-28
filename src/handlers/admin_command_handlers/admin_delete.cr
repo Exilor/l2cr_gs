@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminDelete
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == commands[0]
       handle_delete(pc)
     end
@@ -24,13 +24,17 @@ module AdminCommandHandler::AdminDelete
         end
       end
 
-      pc.send_message("Deleted #{target.name} from #{target.l2id}.")
+      pc.send_message("Deleted #{target} from #{target.l2id}.")
     else
-      if target.responds_to?(:delete_me) && !target.is_a?(L2PcInstance)
-        target.delete_me
-      else
-        pc.send_packet(SystemMessageId::INCORRECT_TARGET)
+      unless target.is_a?(L2PcInstance)
+        if target.responds_to?(:delete_me)
+          target.delete_me
+          pc.send_message("Deleted #{target} from #{target.l2id}.")
+          return
+        end
       end
+
+      pc.send_packet(SystemMessageId::INCORRECT_TARGET)
     end
   end
 

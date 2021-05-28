@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminRepairChar
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     handle_repair(command)
     true
   end

@@ -331,7 +331,7 @@ module RecipeController
           sm.add_item_name(item.item_id)
           @pc.send_packet(sm)
         else
-          @target.send_message("Manufacturer #{@pc.name} used #{count} #{item.item_name}")
+          @target.send_message("Manufacturer #{@pc} used #{count} #{item.item_name}")
         end
       end
     end
@@ -350,7 +350,7 @@ module RecipeController
       end
       @creation_passes = @total_items // @item_grab
       if @total_items % @item_grab != 0
-        @creation_passes += 1
+        @creation_passes &+= 1
       end
       if @creation_passes < 1
         @creation_passes = 1

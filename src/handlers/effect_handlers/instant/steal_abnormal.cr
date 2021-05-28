@@ -3,7 +3,7 @@ class EffectHandler::StealAbnormal < AbstractEffect
   @rate : Int32
   @max : Int32
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @slot = params.get_enum("slot", DispelCategory, DispelCategory::BUFF)

@@ -1,7 +1,7 @@
 module GMAudit
   def self.log(name, action, target, params = "")
     if name.is_a?(L2PcInstance)
-      name = "#{name.name} [#{name.l2id}]"
+      name = "#{name} [#{name.l2id}]"
     end
     target ||= "no-target"
     dir = Dir.current + "/logs/GMAudit"

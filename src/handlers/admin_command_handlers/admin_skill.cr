@@ -4,7 +4,7 @@ module AdminCommandHandler::AdminSkill
 
   @@admin_skills : Slice(Skill)?
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_show_skills"
       show_main_page(pc)
     elsif command.starts_with?("admin_remove_skills")
@@ -43,7 +43,7 @@ module AdminCommandHandler::AdminSkill
         return false
       end
       target.all_skills.each { |sk| target.remove_skill(sk) }
-      pc.send_message("You have removed all skills from #{target.name}.")
+      pc.send_message("You have removed all skills from #{target}.")
       pc.send_message("Admin removed all skills from you.")
       pc.send_skill_list
       pc.broadcast_user_info
@@ -76,7 +76,7 @@ module AdminCommandHandler::AdminSkill
       return
     end
 
-    pc.send_message("You gave #{target.give_available_skills(include_fs, true)} skills to #{target.name}")
+    pc.send_message("You gave #{target.give_available_skills(include_fs, true)} skills to #{target}")
     target.send_skill_list
   end
 

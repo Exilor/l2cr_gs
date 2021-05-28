@@ -93,7 +93,7 @@ class Scripts::GiganticGolem < AbstractNpcAI
     when "CORE_AI"
       if npc
         npc.as(L2Attackable).clear_aggro_list
-        npc.disable_core_ai(false)
+        npc.core_ai_disabled = false
       end
     when "CLEAR_STATUS"
       add_spawn(DR_CHAOS, DR_CHAOS_LOC, false, 0)
@@ -102,7 +102,7 @@ class Scripts::GiganticGolem < AbstractNpcAI
       npc = npc.not_nil!
       add_skill_cast_desire(npc, npc, SMOKE, 1_000_000)
       unless npc.variables.get_bool(ATTACK_FLAG, false)
-        npc.disable_core_ai(true)
+        npc.core_ai_disabled = true
         npc.variables[ATTACK_FLAG] = true
       end
     when "MOVE_TIME"
@@ -164,7 +164,7 @@ class Scripts::GiganticGolem < AbstractNpcAI
       end
 
       if npc.calculate_distance(npc.spawn, false, false) > MAX_CHASE_DIST
-        npc.disable_core_ai(true)
+        npc.core_ai_disabled = true
         npc.tele_to_location(npc.spawn)
       end
     end

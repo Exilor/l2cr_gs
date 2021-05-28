@@ -141,8 +141,8 @@ class PlayerClass < EnumClass
     @race == race
   end
 
-  def self.get_set(race : Race?, level : ClassLevel) : EnumSet(PlayerClass)
-    set = EnumSet(PlayerClass).new
+  def self.get_set(race : Race?, level : ClassLevel) : Set(PlayerClass)
+    set = Set(PlayerClass).new
     each do |pc|
       if race.nil? || pc.of_race?(race)
         if level.nil? || pc.of_level?(level)
@@ -153,35 +153,35 @@ class PlayerClass < EnumClass
     set
   end
 
-  private NEVER_SUBCLASSED = EnumSet.new({Overlord, Warsmith})
+  private NEVER_SUBCLASSED = Set.new({Overlord, Warsmith})
   private MAIN_SUBCLASS_SET = get_set(nil, ClassLevel::Third) - NEVER_SUBCLASSED
 
   private SUBCLASS_SET_MAP = {
-    DarkAvenger => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
-    Paladin => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
-    TempleKnight => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
-    ShillienKnight => EnumSet.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
+    DarkAvenger => Set.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
+    Paladin => Set.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
+    TempleKnight => Set.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
+    ShillienKnight => Set.new({DarkAvenger, Paladin, TempleKnight, ShillienKnight}),
 
-    TreasureHunter => EnumSet.new({TreasureHunter, AbyssWalker, Plainswalker}),
-    AbyssWalker => EnumSet.new({TreasureHunter, AbyssWalker, Plainswalker}),
-    Plainswalker => EnumSet.new({TreasureHunter, AbyssWalker, Plainswalker}),
+    TreasureHunter => Set.new({TreasureHunter, AbyssWalker, Plainswalker}),
+    AbyssWalker => Set.new({TreasureHunter, AbyssWalker, Plainswalker}),
+    Plainswalker => Set.new({TreasureHunter, AbyssWalker, Plainswalker}),
 
-    Hawkeye => EnumSet.new({Hawkeye, SilverRanger, PhantomRanger}),
-    SilverRanger => EnumSet.new({Hawkeye, SilverRanger, PhantomRanger}),
-    PhantomRanger => EnumSet.new({Hawkeye, SilverRanger, PhantomRanger}),
+    Hawkeye => Set.new({Hawkeye, SilverRanger, PhantomRanger}),
+    SilverRanger => Set.new({Hawkeye, SilverRanger, PhantomRanger}),
+    PhantomRanger => Set.new({Hawkeye, SilverRanger, PhantomRanger}),
 
-    Warlock => EnumSet.new({Warlock, ElementalSummoner, PhantomSummoner}),
-    ElementalSummoner => EnumSet.new({Warlock, ElementalSummoner, PhantomSummoner}),
-    PhantomSummoner => EnumSet.new({Warlock, ElementalSummoner, PhantomSummoner}),
+    Warlock => Set.new({Warlock, ElementalSummoner, PhantomSummoner}),
+    ElementalSummoner => Set.new({Warlock, ElementalSummoner, PhantomSummoner}),
+    PhantomSummoner => Set.new({Warlock, ElementalSummoner, PhantomSummoner}),
 
-    Sorceror => EnumSet.new({Sorceror, Spellsinger, Spellhowler}),
-    Spellsinger => EnumSet.new({Sorceror, Spellsinger, Spellhowler}),
-    Spellhowler => EnumSet.new({Sorceror, Spellsinger, Spellhowler})
+    Sorceror => Set.new({Sorceror, Spellsinger, Spellhowler}),
+    Spellsinger => Set.new({Sorceror, Spellsinger, Spellhowler}),
+    Spellhowler => Set.new({Sorceror, Spellsinger, Spellhowler})
   }
 
   private delegate get_set, to: PlayerClass
 
-  def get_available_subclasses(pc : L2PcInstance) : EnumSet(PlayerClass)?
+  def get_available_subclasses(pc : L2PcInstance) : Set(PlayerClass)?
     subclasses = nil
 
     if @level.third?

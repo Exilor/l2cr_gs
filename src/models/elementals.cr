@@ -179,15 +179,24 @@ class Elementals
     each { |item| TABLE[item.item_id] = item }
   end
 
+  enum ElementalItemType : UInt8
+    Stone
+    Roughore
+    Crystal
+    Jewel
+    Energy
 
-  class ElementalItemType < EnumClass
-    getter max_level
-    protected initializer max_level : Int32
-
-    add(Stone,    3)
-    add(Roughore, 3)
-    add(Crystal,  6)
-    add(Jewel,    9)
-    add(Energy,   12)
+    def max_level : Int32
+      case self
+      when Stone, Roughore
+        3
+      when Crystal
+        6
+      when Jewel
+        9
+      else
+        12
+      end
+    end
   end
 end

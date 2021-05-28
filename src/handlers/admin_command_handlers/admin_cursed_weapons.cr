@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminCursedWeapons
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     cwm = CursedWeaponsManager
     id = 0
 

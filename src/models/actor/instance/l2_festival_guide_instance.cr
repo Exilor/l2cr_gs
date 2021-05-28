@@ -2,7 +2,7 @@ class L2FestivalGuideInstance < L2Npc
   getter festival_type, festival_oracle
 
   def initialize(template : L2NpcTemplate)
-    super(template)
+    super
 
     case id
     when 31127, 31132

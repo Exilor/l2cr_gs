@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminInstance
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     st.shift
 
@@ -48,7 +48,7 @@ module AdminCommandHandler::AdminInstance
           target.send_message("Admin set your instance to: #{val}")
           target.tele_to_location(target)
         end
-        pc.send_message("Moved #{target.name} to instance #{target.instance_id}.")
+        pc.send_message("Moved #{target} to instance #{target.instance_id}.")
         return true
       rescue e
         warn e

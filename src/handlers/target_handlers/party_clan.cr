@@ -2,7 +2,7 @@ module TargetHandler::PartyClan
   extend self
   extend TargetHandler
 
-  def get_target_list(skill, char, only_first, target) : Array(L2Object)
+  def get_target_list(skill : Skill, char : L2Character, only_first : Bool, target : L2Character?) : Array(L2Object)
     return [char] of L2Object if only_first
     return EMPTY_TARGET_LIST unless pc = char.acting_player
     target_list = [char] of L2Object

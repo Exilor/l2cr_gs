@@ -568,8 +568,8 @@ class L2AttackableAI < L2CharacterAI
       end
     end
 
-    if !npc.movement_disabled? && npc.dodge > 0
-      if Rnd.rand(100) <= npc.dodge
+    if !npc.movement_disabled? && npc.ai_type.archer?
+      if Rnd.rand(100) <= 15
         distance2 = npc.calculate_distance(most_hate, false, true)
         if Math.sqrt(distance2) <= 60 + combined_collision
           pos_x = npc.x
@@ -806,30 +806,52 @@ class L2AttackableAI < L2CharacterAI
 
     dist = npc.calculate_distance(most_hate, false, false)
     dist2 = (dist - collision).to_i32
-    range = npc.physical_attack_range + combined_collision
+    if npc.ai_type.archer?
+      range = 850 + combined_collision
+    else
+      range = npc.physical_attack_range + combined_collision
+    end
     if most_hate.moving?
-      range = range + 50
+      range += 50
       if npc.moving?
-        range = range + 50
+        range += 50
       end
     end
 
     # Long/Short Range skill usage.
     if !npc.short_range_skills.empty? && npc.has_skill_chance?
-      short_range_skill = npc.short_range_skills.sample(random: Rnd)
-      if check_skill_cast_conditions(npc, short_range_skill)
-        client_stop_moving(nil)
-        npc.do_cast(short_range_skill)
-        return
+      npc.short_range_skills.each do |skill|
+        unless check_skill_cast_conditions(npc, skill)
+          next
+        end
+
+        if Util.in_range?(skill.cast_range, npc, most_hate, false)
+          if npc.has_skill_chance?
+            if GeoData.can_see_target?(npc, most_hate)
+              client_stop_moving(nil)
+              npc.do_cast(skill)
+              return
+            end
+          end
+        end
       end
     end
 
     if !npc.long_range_skills.empty? && npc.has_skill_chance?
-      long_range_skill = npc.long_range_skills.sample(random: Rnd)
-      if check_skill_cast_conditions(npc, long_range_skill)
-        client_stop_moving(nil)
-        npc.do_cast(long_range_skill)
-        return
+      npc.long_range_skills.each do |skill|
+        unless check_skill_cast_conditions(npc, skill)
+          next
+        end
+
+        if Util.in_range?(skill.cast_range, npc, most_hate, false)
+          if npc.has_skill_chance?
+            if GeoData.can_see_target?(npc, most_hate)
+              client_stop_moving(nil)
+              npc.do_cast(skill)
+              return
+            end
+          end
+        end
       end
     end
 

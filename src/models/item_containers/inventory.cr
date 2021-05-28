@@ -433,12 +433,10 @@ abstract class Inventory < ItemContainer
     super
   end
 
-  # L2J: getPaperdollItem
   def [](slot : Int32) : L2ItemInstance?
-    @paperdoll.fetch(slot) { raise "Slot #{slot} outside of inventory bounds" }
+    @paperdoll[slot]
   end
 
-  # L2J: isPaperdollSlotEmpty
   def slot_empty?(slot : Int32) : Bool
     self[slot].nil?
   end
@@ -525,7 +523,6 @@ abstract class Inventory < ItemContainer
     sync { @paperdoll_listeners.delete_first(listener) }
   end
 
-  # L2J: setPaperdollItem
   def []=(slot : Int32, item : L2ItemInstance?) : L2ItemInstance?
     sync do
       old = self[slot]
@@ -813,8 +810,8 @@ abstract class Inventory < ItemContainer
     return unless bow
     @items.find do |item|
       item.etc_item? &&
-      item.template.item_grade_s_plus == bow.item_grade_s_plus &&
-      item.item_type == EtcItemType::ARROW
+        item.template.item_grade_s_plus == bow.item_grade_s_plus &&
+        item.item_type == EtcItemType::ARROW
     end
   end
 

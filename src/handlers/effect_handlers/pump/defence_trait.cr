@@ -1,7 +1,7 @@
 class EffectHandler::DefenceTrait < AbstractEffect
   @defence_traits = Slice({UInt8, Float32}).empty
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     if params.empty?

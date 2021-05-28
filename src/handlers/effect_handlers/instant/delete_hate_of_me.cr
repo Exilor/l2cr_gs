@@ -1,7 +1,7 @@
 class EffectHandler::DeleteHateOfMe < AbstractEffect
   @chance : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @chance = params.get_f64("chance", 100)
   end

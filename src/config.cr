@@ -69,11 +69,11 @@ module Config
     end
 
     def get_reward_items(job)
-      @reward_items[job]? || Slice(ItemHolder).empty
+      @reward_items.fetch(job) { Slice(ItemHolder).empty }
     end
 
     def get_require_items(job)
-      @claim_items[job]? || Slice(ItemHolder).empty
+      @claim_items.fetch(job) { Slice(ItemHolder).empty }
     end
   end
 

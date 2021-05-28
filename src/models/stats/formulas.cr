@@ -18,42 +18,43 @@ module Formulas
   private HP_REGENERATE_PERIOD = 3000 # ms.
   private MELEE_ATTACK_RANGE = 40
 
-  @@npc_std_calculators : Slice(Calculator?)?
-  @@std_door_calculators : Slice(Calculator?)?
+  private NPC_CALCULATORS = begin
+    std = Slice(Calculator?).new(Stats.size)
+
+    std[MAX_HP.to_i] = Calculator.new(FuncMaxHpMul::INSTANCE)
+    std[MAX_MP.to_i] = Calculator.new(FuncMaxMpMul::INSTANCE)
+    std[POWER_ATTACK.to_i] = Calculator.new(FuncPAtkMod::INSTANCE)
+    std[MAGIC_ATTACK.to_i] = Calculator.new(FuncMAtkMod::INSTANCE)
+    std[POWER_DEFENCE.to_i] = Calculator.new(FuncPDefMod::INSTANCE)
+    std[MAGIC_DEFENCE.to_i] = Calculator.new(FuncMDefMod::INSTANCE)
+    std[CRITICAL_RATE.to_i] = Calculator.new(FuncAtkCritical::INSTANCE)
+    std[MCRITICAL_RATE.to_i] = Calculator.new(FuncMAtkCritical::INSTANCE)
+    std[ACCURACY_COMBAT.to_i] = Calculator.new(FuncAtkAccuracy::INSTANCE)
+    std[EVASION_RATE.to_i] = Calculator.new(FuncAtkEvasion::INSTANCE)
+    std[POWER_ATTACK_SPEED.to_i] = Calculator.new(FuncPAtkSpeed::INSTANCE)
+    std[MAGIC_ATTACK_SPEED.to_i] = Calculator.new(FuncMAtkSpeed::INSTANCE)
+    std[MOVE_SPEED.to_i] = Calculator.new(FuncMoveSpeed::INSTANCE)
+
+    std
+  end
+
+  private DOOR_CALCULATORS = begin
+    std = Slice(Calculator?).new(Stats.size)
+
+    std[ACCURACY_COMBAT.to_i] = Calculator.new(FuncAtkAccuracy::INSTANCE)
+    std[EVASION_RATE.to_i] = Calculator.new(FuncAtkEvasion::INSTANCE)
+    std[POWER_DEFENCE.to_i] = Calculator.new(FuncGatesPDefMod::INSTANCE)
+    std[MAGIC_DEFENCE.to_i] = Calculator.new(FuncGatesMDefMod::INSTANCE)
+
+    std
+  end
 
   def npc_std_calculators : Slice(Calculator?)
-    @@npc_std_calculators ||= begin
-      std = Slice(Calculator?).new(Stats.size)
-
-      std[MAX_HP.to_i] = Calculator.new(FuncMaxHpMul::INSTANCE)
-      std[MAX_MP.to_i] = Calculator.new(FuncMaxMpMul::INSTANCE)
-      std[POWER_ATTACK.to_i] = Calculator.new(FuncPAtkMod::INSTANCE)
-      std[MAGIC_ATTACK.to_i] = Calculator.new(FuncMAtkMod::INSTANCE)
-      std[POWER_DEFENCE.to_i] = Calculator.new(FuncPDefMod::INSTANCE)
-      std[MAGIC_DEFENCE.to_i] = Calculator.new(FuncMDefMod::INSTANCE)
-      std[CRITICAL_RATE.to_i] = Calculator.new(FuncAtkCritical::INSTANCE)
-      std[MCRITICAL_RATE.to_i] = Calculator.new(FuncMAtkCritical::INSTANCE)
-      std[ACCURACY_COMBAT.to_i] = Calculator.new(FuncAtkAccuracy::INSTANCE)
-      std[EVASION_RATE.to_i] = Calculator.new(FuncAtkEvasion::INSTANCE)
-      std[POWER_ATTACK_SPEED.to_i] = Calculator.new(FuncPAtkSpeed::INSTANCE)
-      std[MAGIC_ATTACK_SPEED.to_i] = Calculator.new(FuncMAtkSpeed::INSTANCE)
-      std[MOVE_SPEED.to_i] = Calculator.new(FuncMoveSpeed::INSTANCE)
-
-      std
-    end
+    NPC_CALCULATORS
   end
 
   def std_door_calculators : Slice(Calculator?)
-    @@std_door_calculators ||= begin
-      std = Slice(Calculator?).new(Stats.size)
-
-      std[ACCURACY_COMBAT.to_i] = Calculator.new(FuncAtkAccuracy::INSTANCE)
-      std[EVASION_RATE.to_i] = Calculator.new(FuncAtkEvasion::INSTANCE)
-      std[POWER_DEFENCE.to_i] = Calculator.new(FuncGatesPDefMod::INSTANCE)
-      std[MAGIC_DEFENCE.to_i] = Calculator.new(FuncGatesMDefMod::INSTANCE)
-
-      std
-    end
+    DOOR_CALCULATORS
   end
 
   def get_regenerate_period(char : L2Character) : Int32
@@ -411,15 +412,9 @@ module Formulas
         attacker.send_packet(sm)
       end
 
-      # if (attacker.acting_player || target.acting_player).try &.gm?
-      #   debug { "Failed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
-      # end
-
       return false
     end
-    # if (attacker.acting_player || target.acting_player).try &.gm?
-    #   debug { "Landed #{skill} from #{attacker.name} against #{target.name} (#{final_rate.to_i}%)." }
-    # end
+
     true
   end
 
@@ -1166,11 +1161,8 @@ module Formulas
     side_mod = char.in_front_of_target? ? 1 : char.behind_target? ? 2 : 1.5
     base_rate = blow_chance * dex_mod * side_mod
     rate = char.calc_stat(BLOW_RATE, base_rate, target)
+
     result = Rnd.rand(100) < rate
-    # if (char.acting_player || target.acting_player).try &.gm?
-    #   tmp = result ? "Landed" : "Missed"
-    #   debug { "#{tmp} blow from #{char.name} against #{target.name} (chance: #{rate}%)." }
-    # end
     if !result && (pc = char.acting_player)
       pc.send_packet(SystemMessageId::ATTACK_FAILED)
     end

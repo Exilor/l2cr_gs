@@ -17,7 +17,7 @@ class ItemDocument < AbstractDocument
 
   getter(item_list) { [] of L2Item }
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "item") do |d|
         parse_item(d)

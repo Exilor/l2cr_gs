@@ -15,7 +15,7 @@ module RecipeData
     info { "Loaded #{RECIPES.size} recipes." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     recipe_part_list = [] of L2RecipeInstance
     recipe_stat_use_list = [] of L2RecipeStatInstance
     recipe_alt_stat_change_list = [] of L2RecipeStatInstance

@@ -2,7 +2,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
   BATCH_LENGTH = 4
 
   @list_id = 0
-  @items : Slice(Int32)?
+  @items = Slice(Int32).empty
 
   private def read_impl
     @list_id = d
@@ -22,7 +22,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
       return
     end
 
-    unless items = @items
+    if @items.empty?
       action_failed
       return
     end
@@ -45,7 +45,6 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
     unless buy_list = BuyListData.get_buy_list(@list_id)
       Util.punish(pc, "sent an invalid BuyList list_id #{@list_id}.")
-      warn { "No buy list with id #{@list_id}." }
       return
     end
 
@@ -59,21 +58,19 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
     adena = 0i64
 
     refund = pc.refund.items
-    l2ids = Slice.new(items.size, 0)
+    l2ids = Slice.new(@items.size, 0)
 
     inv = pc.inventory
 
-    items.each_with_index do |idx, i|
+    @items.each_with_index do |idx, i|
       if idx < 0 || idx >= refund.size
-        warn { "Refund index error #{idx}/#{refund.size}." }
-        Util.punish(pc, "sent an invalid refund index.")
+        Util.punish(pc, "sent an invalid refund index (#{idx}/#{refund.size}).")
         return
       end
 
-      (i &+ 1...items.size).each do |j|
-        if idx == items[j]
-          warn { "Duplicated refund index #{idx}, #{items[j]}." }
-          Util.punish(pc, "sent a duplicate refund index.")
+      (i &+ 1...@items.size).each do |j|
+        if idx == @items[j]
+          Util.punish(pc, "sent a duplicate refund index (#{idx}, #{@items[j]}).")
           return
         end
       end
@@ -84,8 +81,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
 
       i.times do |j|
         if l2ids[i] == l2ids[j]
-          warn { "Duplicated refund l2id #{l2ids[i]}, #{l2ids[j]}." }
-          Util.punish(pc, "sent a duplicate refund index.")
+          Util.punish(pc, "sent a duplicate refund index (#{l2ids[i]}, #{l2ids[j]}).")
           return
         end
       end
@@ -119,7 +115,7 @@ class Packets::Incoming::RequestRefundItem < GameClientPacket
       return
     end
 
-    items.each_index do |i|
+    @items.each_index do |i|
       item = pc.refund.transfer_item(
         "Refund",
         l2ids[i],

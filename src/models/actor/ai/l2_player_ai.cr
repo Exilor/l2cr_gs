@@ -153,6 +153,14 @@ class L2PlayerAI < L2PlayableAI
 
     if skill.hit_time > 50 && !skill.simultaneous_cast?
       client_stop_moving(nil)
+    elsif skill.toggle? && pc.moving? && (ni = @next_intention)
+      if ni.intention.in?(ATTACK, FOLLOW)
+        pc.stop_effects_on_action
+        skill.activate_skill(pc, pc)
+        pc.casting_now = false
+        set_intention(ni.intention, ni.arg_0)
+        return
+      end
     end
 
     pc.do_cast(skill)

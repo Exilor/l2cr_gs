@@ -66,19 +66,16 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     attachments.items.each do |item|
       if item.owner_id != msg.sender_id
         Util.punish(pc, "tried to get items intended to someone else.")
-        warn { "#{pc} tried to receive a mailed item not owned by its sender (1)." }
         return
       end
 
       unless item.item_location.mail?
         Util.punish(pc, "tried to get an item from mail which was not in the mail.")
-        warn { "#{item} should be in ItemLocation::MAIL but it's in #{item.item_location}." }
         return
       end
 
       if item.location_slot != msg.id
         Util.punish(pc, "tried to get items from another mail attachment.")
-        warn { "#{pc} tried to receive a mailed item from a different attachment." }
         return
       end
 
@@ -115,7 +112,6 @@ class Packets::Incoming::RequestPostAttachment < GameClientPacket
     attachments.items.safe_each do |item|
       if item.owner_id != msg.sender_id
         Util.punish(pc, "tried to get items from a mail sent to somebody else.")
-        warn { "#{pc} tried to receive an item not owned by its sender (2)." }
         return
       end
 

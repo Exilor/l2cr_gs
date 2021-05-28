@@ -112,7 +112,7 @@ module RaidBossSpawnManager
     }
     raid.raid_status = Status::ALIVE
     STORED_INFO[raid.id] = info
-    info { "Spawning night raid boss #{raid.name}." }
+    info { "Spawning night raid boss #{raid}." }
     BOSSES[raid.id] = raid
   end
 
@@ -191,7 +191,7 @@ module RaidBossSpawnManager
 
       if !SCHEDULES.has_key?(boss.id) && (min_delay > 0 || max_delay > 0)
         time = Time.from_ms(respawn_time)
-        info { "Updated #{boss.name} respawn time to #{time}." }
+        info { "Updated #{boss} respawn time to #{time}." }
         ss = SpawnSchedule.new(boss.id)
         task = ThreadPoolManager.schedule_general(ss, delay)
         SCHEDULES[boss.id] = task
@@ -252,7 +252,7 @@ module RaidBossSpawnManager
         }
         raid.raid_status = Status::ALIVE
         STORED_INFO[raid.id] = info
-        info { "Spawning raid boss #{raid.name}." }
+        info { "Spawning raid boss #{raid}." }
         BOSSES[raid.id] = raid
       end
     end

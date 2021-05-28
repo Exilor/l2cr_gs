@@ -1,37 +1,37 @@
 class L2MapRegion
-  @other_spawns : Array(Location)?
-  @chaotic_spawns : Array(Location)?
-  @banish_spawns : Array(Location)?
+  @other_spawns = Slice(Location).empty
+  @chaotic_spawns = Slice(Location).empty
+  @banish_spawns = Slice(Location).empty
 
   getter banned_race = EnumMap(Race, String).new
-  getter! maps : Array({Int32, Int32})?
-  getter! spawns : Array(Location)?
+  getter maps = Slice({Int32, Int32}).empty
+  getter spawns = Slice(Location).empty
 
   getter_initializer name : String, town : String, loc_id : Int32,
     castle : Int32, bbs : Int32
 
   def add_map(x : Int32, y : Int32)
-    (@maps ||= [] of {Int32, Int32}) << {x, y}
+    @maps = @maps.add({x, y})
   end
 
   def zone_in_region?(x : Int32, y : Int32) : Bool
-    !!@maps && maps.any? { |map| map[0] == x && map[1] == y }
+    @maps.any? { |map| map[0] == x && map[1] == y }
   end
 
   def add_spawn(x : Int32, y : Int32, z : Int32)
-    (@spawns ||= [] of Location) << Location.new(x, y, z)
+    @spawns = @spawns.add(Location.new(x, y, z))
   end
 
   def add_other_spawn(x : Int32, y : Int32, z : Int32)
-    (@other_spawns ||= [] of Location) << Location.new(x, y, z)
+    @other_spawns = @other_spawns.add(Location.new(x, y, z))
   end
 
   def add_chaotic_spawn(x : Int32, y : Int32, z : Int32)
-    (@chaotic_spawns ||= [] of Location) << Location.new(x, y, z)
+    @chaotic_spawns = @chaotic_spawns.add(Location.new(x, y, z))
   end
 
   def add_banish_spawn(x : Int32, y : Int32, z : Int32)
-    (@banish_spawns ||= [] of Location) << Location.new(x, y, z)
+    @banish_spawns = @banish_spawns.add(Location.new(x, y, z))
   end
 
   def spawn_loc : Location
@@ -43,38 +43,38 @@ class L2MapRegion
   end
 
   def other_spawn_loc : Location
-    if temp = @other_spawns
-      if Config.random_respawn_in_town_enabled
-        temp.sample(random: Rnd)
-      else
-        temp[0]
-      end
+    if @other_spawns.empty?
+      return spawn_loc
+    end
+
+    if Config.random_respawn_in_town_enabled
+      @other_spawns.sample(random: Rnd)
     else
-      spawn_loc
+      @other_spawns[0]
     end
   end
 
   def chaotic_spawn_loc : Location
-    if temp = @chaotic_spawns
-      if Config.random_respawn_in_town_enabled
-        temp.sample(random: Rnd)
-      else
-        temp[0]
-      end
+    if @chaotic_spawns.empty?
+      return spawn_loc
+    end
+
+    if Config.random_respawn_in_town_enabled
+      @chaotic_spawns.sample(random: Rnd)
     else
-      spawn_loc
+      @chaotic_spawns[0]
     end
   end
 
   def banish_spawn_loc : Location
-    if temp = @banish_spawns
-      if Config.random_respawn_in_town_enabled
-        temp.sample(random: Rnd)
-      else
-        temp[0]
-      end
+    if @banish_spawns.empty?
+      return spawn_loc
+    end
+
+    if Config.random_respawn_in_town_enabled
+      @banish_spawns.sample(random: Rnd)
     else
-      spawn_loc
+      @banish_spawns[0]
     end
   end
 

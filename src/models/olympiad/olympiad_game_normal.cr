@@ -250,7 +250,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
             winside = 2
 
             if Config.alt_oly_log_fights
-              Logs[:olympiad].info { "#{@player_one} default#{Config::EOL}#{@player_one.name}, #{@player_two.name} 0, 0, 0, 0, #{points}, #{type}" }
+              Logs[:olympiad].info { "#{@player_one} default#{Config::EOL}#{@player_one}, #{@player_two} 0, 0, 0, 0, #{points}, #{type}" }
             end
           rescue e
             error e
@@ -270,7 +270,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
             end
 
             if Config.alt_oly_log_fights
-              Logs[:olympiad].info { "#{@player_two.name} default#{Config::EOL}#{@player_one.name}, #{@player_two.name} 0, 0, 0, 0, #{points}, #{type}" }
+              Logs[:olympiad].info { "#{@player_two} default#{Config::EOL}#{@player_one}, #{@player_two} 0, 0, 0, 0, #{points}, #{type}" }
             end
           rescue e
             error e
@@ -310,7 +310,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
           reward_participant(@player_one.player, reward)
 
           if Config.alt_oly_log_fights
-            Logs[:olympiad].info { "#{@player_two.name} crash#{Config::EOL}#{@player_one.name}, #{@player_two.name}, 0, 0, 0, 0, #{point_diff}, #{type}" }
+            Logs[:olympiad].info { "#{@player_two} crash#{Config::EOL}#{@player_one}, #{@player_two}, 0, 0, 0, 0, #{point_diff}, #{type}" }
           end
 
           # Notify to scripts
@@ -333,7 +333,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
           reward_participant(@player_two.player, reward)
 
           if Config.alt_oly_log_fights
-            Logs[:olympiad].info { "#{@player_one} crash#{Config::EOL}#{@player_one.name}, #{@player_two.name}, 0, 0, 0, 0, #{point_diff}, #{type}" }
+            Logs[:olympiad].info { "#{@player_one} crash#{Config::EOL}#{@player_one}, #{@player_two}, 0, 0, 0, 0, #{point_diff}, #{type}" }
           end
           # Notify to scripts
           OnOlympiadMatchResult.new(@player_two, @player_one, type).async(Olympiad.instance)
@@ -351,7 +351,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
           tie = true
 
           if Config.alt_oly_log_fights
-            Logs[:olympiad].info { "both crashed#{Config::EOL}#{@player_one.name}, #{@player_two.name}, 0, 0, 0, 0, #{point_diff}, #{type}" }
+            Logs[:olympiad].info { "both crashed#{Config::EOL}#{@player_one}, #{@player_two}, 0, 0, 0, 0, #{point_diff}, #{type}" }
           end
         end
 
@@ -490,7 +490,7 @@ abstract class OlympiadGameNormal < AbstractOlympiadGame
       stadium.broadcast_packet(result)
 
       if Config.alt_oly_log_fights
-        Logs[:olympiad].info { "#{winner}#{Config::EOL}#{@player_one.name}, #{@player_two.name}, #{p1_hp}, #{p2_hp}, #{@damage_p1}, #{@damage_p2}, #{point_diff}, #{type}" }
+        Logs[:olympiad].info { "#{winner}#{Config::EOL}#{@player_one}, #{@player_two}, #{p1_hp}, #{p2_hp}, #{@damage_p1}, #{@damage_p2}, #{point_diff}, #{type}" }
       end
     rescue e
       error e

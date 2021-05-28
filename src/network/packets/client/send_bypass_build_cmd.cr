@@ -65,6 +65,8 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       send_packet(ClientSetTime::STATIC_PACKET)
     when /^milk\s\d+$/
       milk_target
+    when /^farm\s\d+$/
+      farm
     when "aspir"
       aspir(999999)
     when /^uplift\s.*/
@@ -200,6 +202,11 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       rescue e
         error e
       end
+    end
+
+    pc.party.try &.each do |m|
+      task = -> { m.inventory.items.each { |item| item.owner_id = m.l2id } }
+      ThreadPoolManager.schedule_general(task, 20000)
     end
   end
 
@@ -525,6 +532,16 @@ class Packets::Incoming::SendBypassBuildCMD < GameClientPacket
       pc.inventory.add_item("GM", 15586, 1, pc, nil)  # Elegia Shoes
     }
     items.concat(items2)
+  end
+
+  def farm
+    timer = Timer.new
+    milk_target
+    sleep 0.1
+    aspir(1500)
+    pc.target.as?(L2Character).try &.do_die(pc)
+    aspir(1500)
+    pc.send_message("Target farmed #{@command.split[-1]} times in #{(timer.result - 0.1).round(2)} s.")
   end
 
   private def pc

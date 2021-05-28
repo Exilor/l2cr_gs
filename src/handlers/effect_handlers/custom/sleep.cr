@@ -1,5 +1,5 @@
 class EffectHandler::Sleep < AbstractEffect
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::SLEEP.mask
   end
 

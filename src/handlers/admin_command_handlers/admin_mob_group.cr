@@ -3,7 +3,7 @@ module AdminCommandHandler::AdminMobGroup
   extend AdminCommandHandler
   include Packets::Outgoing
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     if command == "admin_mobmenu"
       show_main_page(pc, command)
       return true

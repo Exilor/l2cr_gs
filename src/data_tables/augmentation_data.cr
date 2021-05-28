@@ -84,7 +84,7 @@ module AugmentationData
     end
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     bad_augment_data = 0
 
     find_element(doc, "list") do |l|

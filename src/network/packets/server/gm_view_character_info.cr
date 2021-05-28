@@ -33,7 +33,7 @@ class Packets::Outgoing::GMViewCharacterInfo < GameServerPacket
     d @pc.class_id.to_i
     d @pc.level
     q @pc.exp
-    f (@pc.exp.to_f - ExperienceData.get_exp_for_level(@pc.level)) / (ExperienceData.get_exp_for_level(@pc.level &+ 1) - ExperienceData.get_exp_for_level(@pc.level))
+    f ExperienceData.get_percent_from_current_level(@pc.exp, @pc.level)
     d @pc.str
     d @pc.dex
     d @pc.con

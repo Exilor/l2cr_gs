@@ -2,7 +2,7 @@ module ActionHandler::L2ArtefactInstanceAction
   extend self
   extend ActionHandler
 
-  def action(pc, target, interact) : Bool
+  def action(pc : L2PcInstance, target : L2Object, interact : Bool) : Bool
     return false unless target.is_a?(L2Npc)
 
     unless target.can_target?(pc)

@@ -148,7 +148,7 @@ class Scripts::Stage1 < AbstractInstance
     end
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     spawn_count = 0
 
     find_element(doc, "list") do |list|
@@ -356,7 +356,7 @@ class Scripts::Stage1 < AbstractInstance
       world.npc_list[mob] = true
     end
 
-    world.npc_list.local_each_value.all?
+    world.npc_list.all? { |_, v| v }
   end
 
   private def spawn_flagged_npcs(world, flag)
@@ -454,10 +454,10 @@ class Scripts::Stage1 < AbstractInstance
       npc.can_see_through_silent_move = true
     end
     if npc_id == TIAT_VIDEO_NPC
-      start_quest_timer("DoorCheck", 10000, npc, nil)
+      start_quest_timer("DoorCheck", 10_000, npc, nil)
     elsif npc_id == SPAWN_DEVICE
-      npc.disable_core_ai(true)
-      start_quest_timer("Spawn", 10000, npc, nil, true)
+      npc.core_ai_disabled = true
+      start_quest_timer("Spawn", 10_000, npc, nil, true)
     elsif npc_id == TIAT
       npc.immobilized = true
       world.tiat = npc.as(L2MonsterInstance)
@@ -479,7 +479,7 @@ class Scripts::Stage1 < AbstractInstance
     if npc.id == TIAT_GUARD
       start_quest_timer("GuardThink", 2500 + Rnd.rand(-200..200), npc, nil, true)
     else
-      npc.disable_core_ai(true)
+      npc.core_ai_disabled = true
     end
 
     super
@@ -555,7 +555,7 @@ class Scripts::Stage1 < AbstractInstance
           spawn_flagged_npcs(world, 6)
           manage_screen_msg(world, NpcString::ENEMIES_ARE_TRYING_TO_DESTROY_THE_FORTRESS_EVERYONE_DEFEND_THE_FORTRESS)
         else
-          start_quest_timer("DoorCheck", 10000, npc, nil)
+          start_quest_timer("DoorCheck", 10_000, npc, nil)
         end
       elsif event.casecmp?("TiatFullHp")
         if !npc.stunned? && !npc.invul?

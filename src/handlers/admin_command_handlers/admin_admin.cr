@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminAdmin
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     case
     when command.starts_with?("admin_admin")
       show_main_page(pc, command)

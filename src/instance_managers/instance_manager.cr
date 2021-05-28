@@ -85,7 +85,7 @@ module InstanceManager
     INSTANCE_ID_NAMES.fetch(id, "UnkownInstance")
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "instance") do |d|
         id = parse_int(d, "id")
@@ -113,6 +113,7 @@ module InstanceManager
     instance.remove_npcs
     instance.remove_players
     instance.remove_doors
+    instance.remove_fences
     instance.cancel_timer
     INSTANCES.delete(id)
     INSTANCE_WORLDS.delete(id)
@@ -144,7 +145,7 @@ module InstanceManager
     while get_instance(@@dynamic)
       @@dynamic &+= 1
       if @@dynamic == Int32::MAX
-        warn { "More than #{Int32::MAX - 300_000} instances have been created." }
+        warn { "More than #{Int32::MAX &- 300_000} instances have been created." }
         @@dynamic = 300_000
       end
     end

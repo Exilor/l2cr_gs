@@ -31,7 +31,7 @@ struct FourSepulchersChangeAttackTimeTask
         min += 1
       end
     else
-      ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, 5 &* 60400)
+      ThreadPoolManager.schedule_general(FourSepulchersManagerSayTask.new, 5 &* 60_400)
     end
 
     if manager.first_time_run?

@@ -14,7 +14,7 @@ module HellboundSpawns
     info { "Loaded #{SPAWNS.size} Hellbound spawns." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") { |l| each_element(l) { |d| parse_spawn(d) } }
   end
 

@@ -1,7 +1,7 @@
 class EffectHandler::ConsumeChameleonRest < AbstractEffect
   @power : Float64
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @power = params.get_f64("power", 0)
@@ -40,7 +40,7 @@ class EffectHandler::ConsumeChameleonRest < AbstractEffect
     true
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::SILENT_MOVE.mask | EffectFlag::RELAXING.mask
   end
 end

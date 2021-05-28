@@ -2,7 +2,7 @@ module AdminCommandHandler::AdminVitality
   extend self
   extend AdminCommandHandler
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     unless Config.enable_vitality
       pc.send_message("Vitality is not enabled")
       return false

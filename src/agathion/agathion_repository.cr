@@ -27,7 +27,7 @@ module AgathionRepository
     1584 => Agathion.new(1584, 584, 20991, 1000, 1000)
   }
 
-  AGATHION_ITEMS = AGATHIONS.transform_keys { |k| AGATHIONS[k].item_id }
+  private AGATHION_ITEMS = AGATHIONS.transform_keys { |k| AGATHIONS[k].item_id }
 
   def get_by_npc_id(npc_id : Int32) : Agathion?
     AGATHIONS[npc_id]?

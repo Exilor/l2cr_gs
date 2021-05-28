@@ -20,7 +20,7 @@ module AdminData
     info { "Loaded #{ADMIN_COMMAND_ACCESS_RIGHTS.size} access commands." }
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       each_element(n) do |d, d_name|
         if d_name.casecmp?("access")

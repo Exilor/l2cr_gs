@@ -36,7 +36,7 @@ class L2Armor < L2Item
   end
 
   def mask : UInt32
-    item_type.mask
+    item_type.mask.to_u32
   end
 
   def enchant_4_skill : Skill?

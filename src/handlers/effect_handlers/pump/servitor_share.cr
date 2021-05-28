@@ -1,7 +1,7 @@
 class EffectHandler::ServitorShare < AbstractEffect
   @stats = EnumMap(Stats, Float64).new
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     params.each_key do |k|
@@ -9,7 +9,7 @@ class EffectHandler::ServitorShare < AbstractEffect
     end
   end
 
-  def effect_flags : UInt32
+  def effect_flags : UInt64
     EffectFlag::SERVITOR_SHARE.mask
   end
 

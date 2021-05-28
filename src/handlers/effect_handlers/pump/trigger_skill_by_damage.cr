@@ -8,7 +8,7 @@ class EffectHandler::TriggerSkillByDamage < AbstractEffect
   @target_type : TargetType
   @attacker_type : InstanceType
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
 
     @min_attacker_level = params.get_i32("minAttackerLevel", 1)

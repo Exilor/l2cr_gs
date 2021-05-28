@@ -36,7 +36,7 @@ class SkillDocument < AbstractDocument
 
   private getter! current_skill : SkillInfo?
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     each_element(doc) do |n, n_name|
       case n_name.casecmp
       when "list"

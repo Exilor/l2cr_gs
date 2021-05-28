@@ -35,7 +35,7 @@ module NpcData
     NPCS[id]?
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "list") do |n|
       find_element(n, "npc") do |d|
         npc_id = parse_int(d, "id")
@@ -217,7 +217,6 @@ module NpcData
              add_from_node(npc, set, "aiType", "type")
             add_from_node(npc, set, "aggroRange")
             add_from_node(npc, set, "clanHelpRange")
-            add_from_node(npc, set, "dodge")
             add_from_node(npc, set, "isChaos")
             add_from_node(npc, set, "isAggressive")
             each_element(npc) do |ai, ai_name|
@@ -460,7 +459,7 @@ module NpcData
       info { "Loaded #{@minions.size} minion data." }
     end
 
-    private def parse_document(doc, file)
+    private def parse_document(doc : XML::Node, file : File)
       find_element(doc, "list") do |node|
         find_element(node, "npc") do |list|
           minions = [] of MinionHolder

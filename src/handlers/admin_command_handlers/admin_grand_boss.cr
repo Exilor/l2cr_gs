@@ -11,7 +11,7 @@ module AdminCommandHandler::AdminGrandBoss
   private ORFEN         = 29014
   private CORE          = 29006
 
-  def use_admin_command(command, pc)
+  def use_admin_command(command : String, pc : L2PcInstance) : Bool
     st = command.split
     actual_command = st.shift
     case actual_command.casecmp

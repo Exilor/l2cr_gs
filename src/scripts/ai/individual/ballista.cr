@@ -52,7 +52,7 @@ class Scripts::Ballista < AbstractNpcAI
   end
 
   def on_spawn(npc)
-    npc.disable_core_ai(true)
+    npc.core_ai_disabled = true
     npc.mortal = false
 
     super

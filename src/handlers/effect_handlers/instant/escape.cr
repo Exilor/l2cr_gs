@@ -1,7 +1,7 @@
 class EffectHandler::Escape < AbstractEffect
   @escape_type : TeleportWhereType?
 
-  def initialize(attach_cond, apply_cond, set, params)
+  def initialize(attach_cond : Condition?, apply_cond : Condition?, set : StatsSet, params : StatsSet)
     super
     @escape_type = params.get_enum("escapeType", TeleportWhereType, nil)
   end

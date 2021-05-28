@@ -1,7 +1,5 @@
 module AdminCommandHandler
-  macro extended
-    include Loggable
-  end
+  include Loggable
   include Packets::Outgoing
 
   private HANDLERS = {} of String => self
@@ -27,6 +25,7 @@ module AdminCommandHandler
     HANDLERS[cmd]?
   end
 
+  abstract def use_admin_command(command : String, pc : L2PcInstance) : Bool
   abstract def commands : Enumerable(String)
 end
 

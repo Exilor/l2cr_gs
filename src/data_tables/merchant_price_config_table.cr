@@ -23,7 +23,7 @@ module MerchantPriceConfigTable
     ret || default_mpc
   end
 
-  private def parse_document(doc, file)
+  private def parse_document(doc : XML::Node, file : File)
     find_element(doc, "merchantPriceConfig") do |n|
       default_id = parse_int(n, "defaultPriceConfig")
       each_element(n) do |d|
